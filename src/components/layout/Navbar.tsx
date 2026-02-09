@@ -4,156 +4,58 @@ import { useState } from "react";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
-  const linkClass =
-    "block px-4 py-2 text-sm font-semibold tracking-wide transition";
+  const linkClass = "px-4 py-2 text-sm font-bold tracking-widest uppercase transition-all duration-300";
 
   return (
-    <header className="sticky top-0 z-50 bg-primary text-white shadow-lg">
+    <header className="fixed top-0 w-full z-[100] bg-slate-900/40  border-b border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="text-xl font-extrabold tracking-wide">
-            <span className="text-accent">S.B.G</span> Metal Engineering
+        <div className="flex items-center justify-between h-20">
+          
+          {/* Logo Section */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-black text-xl italic group-hover:bg-blue-500 transition-colors">
+              S
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-xl font-black tracking-tighter">S.B.G</span>
+              <span className="text-[10px] text-blue-400 font-bold tracking-[0.2em] uppercase">Engineering</span>
+            </div>
           </Link>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center space-x-2">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `${linkClass} ${
-                  isActive
-                    ? "text-accent"
-                    : "text-gray-200 hover:text-accent"
-                }`
-              }
-            >
-              Home
-            </NavLink>
-
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                `${linkClass} ${
-                  isActive
-                    ? "text-accent"
-                    : "text-gray-200 hover:text-accent"
-                }`
-              }
-            >
-              About
-            </NavLink>
-
-            <NavLink
-              to="/services"
-              className={({ isActive }) =>
-                `${linkClass} ${
-                  isActive
-                    ? "text-accent"
-                    : "text-gray-200 hover:text-accent"
-                }`
-              }
-            >
-              Services
-            </NavLink>
-
-            <NavLink
-              to="/projects"
-              className={({ isActive }) =>
-                `${linkClass} ${
-                  isActive
-                    ? "text-accent"
-                    : "text-gray-200 hover:text-accent"
-                }`
-              }
-            >
-              Projects
-            </NavLink>
-
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                `${linkClass} ${
-                  isActive
-                    ? "text-accent"
-                    : "text-gray-200 hover:text-accent"
-                }`
-              }
-            >
-              Contact
-            </NavLink>
-
-            {/* CTA */}
-            <Link
-              to="/contact"
-              className="ml-4 bg-accent text-black px-5 py-2 rounded-lg font-semibold hover:bg-yellow-400 transition"
-            >
-              Get a Quote
-            </Link>
+          <nav className="hidden md:flex items-center space-x-4">
+            {["Home", "About Us", "Services", "Projects", "Contact"].map((item) => (
+              <NavLink
+                key={item}
+                to={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "")}`}
+                className={({ isActive }) =>
+                  `${linkClass} ${
+                    isActive ? "text-blue-400 border-b-2 border-blue-400" : "text-gray-300 hover:text-white"
+                  }`
+                }
+              >
+                {item}
+              </NavLink>
+            ))}
           </nav>
 
           {/* Mobile button */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden text-gray-200 focus:outline-none"
-          >
-            <svg
-              className="w-7 h-7"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              {open ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
+          <button onClick={() => setOpen(!open)} className="md:hidden text-blue-400">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {open ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />}
             </svg>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {open && (
-        <div className="md:hidden bg-primary border-t border-white/10">
-          <nav className="px-6 py-4 space-y-2">
-            {["/", "/about", "/services", "/projects", "/contact"].map(
-              (path, i) => {
-                const names = [
-                  "Home",
-                  "About",
-                  "Services",
-                  "Projects",
-                  "Contact",
-                ];
-                return (
-                  <NavLink
-                    key={path}
-                    to={path}
-                    onClick={() => setOpen(false)}
-                    className={({ isActive }) =>
-                      `block px-3 py-2 rounded-md font-semibold ${
-                        isActive
-                          ? "bg-accent text-black"
-                          : "text-gray-200 hover:bg-white/10"
-                      }`
-                    }
-                  >
-                    {names[i]}
-                  </NavLink>
-                );
-              }
-            )}
-          </nav>
+        <div className="md:hidden absolute top-20 w-full bg-slate-900/95 backdrop-blur-xl border-b border-white/10 p-6 space-y-4">
+          {["Home", "About Us", "Services", "Projects", "Contact"].map((item) => (
+            <Link key={item} to="/" className="block text-lg font-bold tracking-wide text-gray-200 border-b border-white/5 pb-2">
+              {item}
+            </Link>
+          ))}
         </div>
       )}
     </header>
