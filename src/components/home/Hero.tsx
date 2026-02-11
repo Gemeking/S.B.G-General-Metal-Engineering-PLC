@@ -1,4 +1,4 @@
-
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -58,11 +58,12 @@ export default function Hero() {
 
         {/* Buttons - Amazing solid iron-themed with glow and hover */}
         <div className="flex flex-col md:flex-row justify-center gap-6 animate-fade-in-up animation-delay-600">
-          <a href="/contact">
+        
+<Link to="/contact">
   <button className="px-10 py-4 bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-900 text-white font-bold uppercase rounded-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95">
     GET QUOTE
   </button>
-</a>
+</Link>
 
           
         </div>
