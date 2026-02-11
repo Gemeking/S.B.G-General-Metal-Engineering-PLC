@@ -20,7 +20,7 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-4">
-            {["Home", "About", "Services", "Projects", "Contact"].map((item) => (
+            {["Home", "About", "Contact"].map((item) => (
               <NavLink
                 key={item}
                 to={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "")}`}
@@ -53,7 +53,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {open && (
         <div className="md:hidden absolute top-20 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200 p-6 space-y-4">
-          {["Home", "About", "Services", "Projects", "Contact"].map((item) => (
+          {["Home", "About","Contact"].map((item) => (
             <NavLink
               key={item}
               to={item === "Home" ? "/" : `/${item.toLowerCase().replace(" ", "")}`}
