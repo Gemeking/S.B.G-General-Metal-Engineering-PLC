@@ -7,10 +7,18 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <>
+    <div
+      className="min-h-screen bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: "url('/manufacturing-bg.jpg')" }}
+    >
       <Navbar />
-      <main>{children}</main>
+
+      {/* Optional overlay for readability */}
+      <main className="bg-black/50 min-h-screen">
+        {children}
+      </main>
+
       <Footer />
-    </>
+    </div>
   );
 }

@@ -4,6 +4,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-white text-gray-900 overflow-hidden">
       {/* Background */}
+      
       <div className="absolute inset-0">
         {/* Background Image - Replace with actual manufacturing-themed image */}
         <img
@@ -35,15 +36,14 @@ export default function Hero() {
 
         {/* Subtitle - Enhanced with bold, metallic text */}
         <p className="text-xl md:text-3xl font-semibold mb-16 text-gray-800 tracking-wide drop-shadow-md animate-fade-in-up animation-delay-400">
-          Robotic Manufacturing • Precision Fabrication • Industrial Innovation
+         Manufacturing • Precision Fabrication • Industrial Innovation
         </p>
 
         {/* Stats - Transparent glassmorphism effect for iron-like but see-through */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
           {[
-            ["15+", "Years Experience"],
-            ["500+", "Projects"],
-            ["ISO", "Certified"],
+            ["20+", "Years Experience"],
+            ["200+", "Projects"],
             ["24/7", "Support"],
           ].map(([num, label]) => (
             <div

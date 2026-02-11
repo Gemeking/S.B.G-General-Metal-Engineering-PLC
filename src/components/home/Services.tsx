@@ -13,20 +13,19 @@ export default function Services() {
   ];
 
   return (
-    <section className="min-h-screen bg-[#e8e3d9] text-gray-900 py-20">
-
-      {/* OLD MAGAZINE STYLE OVERLAY */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+   <section className=" py-20 text-white   backdrop-blur-lg
+">
+     
 
       {/* HEADER */}
       <div className="container mx-auto px-6 text-center mb-16 relative">
-        <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest mb-4 text-gray-800">
+        <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest mb-4 ">
           OUR SERVICES
         </h1>
 
         <div className="w-40 h-[3px] bg-gradient-to-r from-gray-700 via-gray-400 to-gray-700 mx-auto mb-6" />
 
-        <p className="text-xl max-w-3xl mx-auto text-gray-700 font-medium">
+        <p className="text-xl max-w-3xl mx-auto  font-medium">
           Precision-engineered industrial solutions built with strength,
           reliability and real-world experience.
         </p>
@@ -77,25 +76,6 @@ export default function Services() {
           </div>
         ))}
       </div>
-
-      {/* CTA */}
-      <div className="container mx-auto px-6 text-center mt-20 relative">
-        <button
-          className="
-            px-12 py-4
-            bg-gradient-to-b from-gray-700 to-black
-            text-white font-bold uppercase tracking-wider
-            border-2 border-black
-            shadow-[5px_5px_0px_rgba(0,0,0,0.5)]
-            hover:shadow-[8px_8px_0px_rgba(0,0,0,0.6)]
-            hover:-translate-y-1
-            transition-all
-          "
-        >
-          GET A QUOTE TODAY
-        </button>
-      </div>
-
     </section>
   );
 }
