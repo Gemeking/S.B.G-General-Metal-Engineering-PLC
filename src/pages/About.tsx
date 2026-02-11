@@ -1,116 +1,137 @@
+import React from "react";
 import Layout from "../components/layout/Layout";
 
 export default function About() {
   return (
     <Layout>
-    <section className="bg-gray-100 text-gray-800">
-      {/* Header */}
-      <div className="bg-primary text-white py-20 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
-            About Us
+    <section className="min-h-screen bg-[#e8e3d9] text-gray-900 py-20 relative">
+
+      {/* PAPER TEXTURE */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+
+      <div className="max-w-7xl mx-auto px-6 relative">
+
+        {/* HEADER */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest text-gray-800">
+            ABOUT US
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto">
-            Strong foundations, precision engineering, and a legacy of excellence
+
+          <div className="w-40 h-[3px] bg-gradient-to-r from-gray-700 via-gray-400 to-gray-700 mx-auto mt-6" />
+
+          <p className="mt-6 text-xl text-gray-700 max-w-3xl mx-auto font-medium">
+            Built on steel, driven by precision, and trusted by industries.
           </p>
         </div>
-      </div>
 
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-        {/* Text */}
-        <div>
-          <h2 className="text-3xl font-bold mb-6 text-primary">
-            S.B.G General Metal Engineering PLC
-          </h2>
+        {/* MAIN GRID */}
+        <div className="grid md:grid-cols-2 gap-12 items-center">
 
-          <p className="mb-4 leading-relaxed">
-            <span className="font-semibold">
+          {/* IMAGE BLOCK */}
+          <div className="
+            border-4 border-gray-800
+            shadow-[10px_10px_0px_rgba(0,0,0,0.5)]
+            bg-gradient-to-b from-gray-300 to-gray-100
+            p-4
+          ">
+            <img
+              src="/about.jpg" // 👉 you replace
+              alt="Factory"
+              className="w-full h-[400px] object-cover border-2 border-gray-700"
+            />
+          </div>
+
+          {/* TEXT BLOCK */}
+          <div className="
+            border-4 border-gray-800
+            shadow-[10px_10px_0px_rgba(0,0,0,0.5)]
+            bg-gradient-to-b from-gray-300 to-gray-100
+            p-10
+            space-y-6
+          ">
+            <h2 className="text-3xl font-extrabold uppercase tracking-wide">
               S.B.G General Metal Engineering PLC
-            </span>{" "}
-            is a professional construction and metal manufacturing company
-            established with the vision of delivering durable, reliable, and
-            high-quality engineering solutions.
-          </p>
+            </h2>
 
-          <p className="mb-4 leading-relaxed">
-            The company was founded by{" "}
-            <span className="font-semibold">
-              Mr. Solomon Begashaw Gurmessa
-            </span>{" "}
-            in <span className="font-semibold">November 2004 G.C</span>{" "}
-            (November 1997 E.C), driven by a strong commitment to excellence,
-            innovation, and integrity in the metal engineering and construction
-            industry.
-          </p>
-
-          <p className="leading-relaxed">
-            Since its establishment, S.B.G has been actively engaged in steel
-            fabrication, industrial construction, and custom metal works,
-            supporting factories, warehouses, and infrastructure projects with
-            precision and professionalism.
-          </p>
-        </div>
-
-        {/* Stats / Highlights */}
-        <div className="grid grid-cols-2 gap-6">
-          <div className="bg-white p-8 rounded-xl shadow-md text-center">
-            <h3 className="text-4xl font-extrabold text-accent mb-2">
-              20+
-            </h3>
-            <p className="font-semibold">Years of Experience</p>
-          </div>
-
-          <div className="bg-white p-8 rounded-xl shadow-md text-center">
-            <h3 className="text-4xl font-extrabold text-accent mb-2">
-              100+
-            </h3>
-            <p className="font-semibold">Completed Projects</p>
-          </div>
-
-          <div className="bg-white p-8 rounded-xl shadow-md text-center">
-            <h3 className="text-4xl font-extrabold text-accent mb-2">
-              Quality
-            </h3>
-            <p className="font-semibold">Driven Engineering</p>
-          </div>
-
-          <div className="bg-white p-8 rounded-xl shadow-md text-center">
-            <h3 className="text-4xl font-extrabold text-accent mb-2">
-              Trust
-            </h3>
-            <p className="font-semibold">Built Over Time</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mission & Vision */}
-      <div className="bg-white py-20 px-6">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-primary">
-              Our Mission
-            </h3>
-            <p className="leading-relaxed">
-              To provide reliable, high-quality metal engineering and
-              construction solutions that meet international standards while
-              exceeding client expectations.
+            <p className="text-gray-800 leading-relaxed font-medium">
+              S.B.G General Metal Engineering PLC is a trusted name in
+              industrial machinery and crusher solutions. We specialize in
+              manufacturing, installation, and maintenance of high-performance
+              crushing and material handling systems.
             </p>
+
+            <p className="text-gray-800 leading-relaxed font-medium">
+              Our team combines real-world engineering experience with
+              modern technology to deliver durable and efficient machinery
+              for mining, construction, and industrial operations.
+            </p>
+
+            <p className="text-gray-800 leading-relaxed font-medium">
+              We don’t just build machines — we build long-term
+              partnerships with our clients by providing reliable support
+              and maintenance.
+            </p>
+
+            {/* METAL STRIP */}
+            <div className="w-full h-2 bg-gradient-to-r from-gray-800 via-gray-500 to-gray-800" />
           </div>
 
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-primary">
-              Our Vision
-            </h3>
-            <p className="leading-relaxed">
-              To become one of the leading metal engineering and construction
-              companies by continuously innovating, growing expertise, and
-              building long-term partnerships.
-            </p>
+        </div>
+
+        {/* VALUES SECTION */}
+        <div className="grid md:grid-cols-3 gap-8 mt-20">
+
+          {[
+            {
+              title: "OUR MISSION",
+              text: "To deliver strong, efficient and reliable crusher and industrial solutions that power growth."
+            },
+            {
+              title: "OUR VISION",
+              text: "To become a leading engineering company known for quality and trust in Africa."
+            },
+            {
+              title: "OUR VALUES",
+              text: "Strength, honesty, precision and long-term client relationships."
+            }
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="
+                border-4 border-gray-800
+                bg-gradient-to-b from-gray-300 to-gray-100
+                p-8
+                shadow-[8px_8px_0px_rgba(0,0,0,0.5)]
+              "
+            >
+              <h3 className="text-xl font-extrabold uppercase mb-4">
+                {item.title}
+              </h3>
+
+              <p className="font-medium text-gray-800">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mt-20">
+          <div className="
+            inline-block
+            px-12 py-5
+            bg-gradient-to-b from-gray-700 to-black
+            text-white
+            font-extrabold uppercase tracking-wider
+            border-2 border-black
+            shadow-[6px_6px_0px_rgba(0,0,0,0.6)]
+          ">
+            BUILT WITH STEEL. TRUSTED BY INDUSTRY.
           </div>
         </div>
+
       </div>
     </section>
-    </Layout>
+     </Layout>
   );
 }
