@@ -6,7 +6,8 @@ export default function Contact() {
     <section className="min-h-screen bg-[#e8e3d9] py-20 text-gray-900 relative">
 
       {/* PAPER TEXTURE */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://i.ytimg.com/vi/C6bhKMwZRXw/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAjkhIb4beZXa4O066pdt3QVFqRAg')]" />
+
 
       <div className="max-w-7xl mx-auto px-6 relative">
 
@@ -133,20 +134,26 @@ export default function Contact() {
         </div>
 
         {/* MAP SECTION */}
-        <div className="mt-20">
+        {/* MAP SECTION */}
+<div className="mt-20">
+  <div
+    className="
+      border-4 border-gray-800
+      shadow-[10px_10px_0px_rgba(0,0,0,0.5)]
+      bg-gradient-to-b from-gray-300 to-gray-100
+      p-4
+    "
+  >
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12087.716396750946!2d38.7549295!3d8.964422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwNTgnNTEuOSJOIDM4wrA0NSc1MC44Ilc!5e0!3m2!1sen!2set!4v1700000000000!5m2!1sen!2set"
+      className="w-full h-[350px] border-0"
+      allowFullScreen
+      loading="lazy"
+      referrerPolicy="no-referrer-when-downgrade"
+    />
+  </div>
+</div>
 
-          <div className="
-            border-4 border-gray-800
-            shadow-[10px_10px_0px_rgba(0,0,0,0.5)]
-            bg-gradient-to-b from-gray-300 to-gray-100
-            p-4
-          ">
-            <div className="w-full h-[350px] bg-gray-400 flex items-center justify-center font-bold text-xl">
-              GOOGLE MAP LOCATION HERE
-            </div>
-          </div>
-
-        </div>
 
       </div>
     </section>
