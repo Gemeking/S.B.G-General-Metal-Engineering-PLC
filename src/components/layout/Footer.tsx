@@ -12,7 +12,7 @@ export default function Footer() {
           {/* LOGO + NAME */}
           <div className="space-y-4">
             <img
-              src="src/assets/images/logo.png"
+              src="logo.png"
               alt="SBG Logo"
               className="h-20 w-auto"
             />

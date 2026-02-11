@@ -6,7 +6,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         {/* Background Image - Replace with actual manufacturing-themed image */}
         <img
-          src="src/assets/images/bg.png" // Assume this is a metallic/industrial background image
+          src="bg.png" // Assume this is a metallic/industrial background image
           alt="Industrial Background"
           className="w-full h-full object-cover filter brightness-100"
         />
@@ -18,7 +18,7 @@ export default function Hero() {
       <div className="relative z-10 container mx-auto px-6 py-12 text-center max-w-5xl mt-20 md:mt-32">
         {/* Logo - Visible only on mobile with awesome animation */}
         <img
-          src="src/assets/images/logo.png"
+          src="logo.png"
           alt="S.B.G"
           className="mx-auto mb-8 w-32 h-32 object-contain filter drop-shadow-2xl md:hidden animate-fade-in-up"
         />

@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 
 export default function Projects() {
   const projects = [
-    { title: "Stone Crusher Plant", img: "src/assets/images/1.jpg" },
-    { title: "Coal Crusher Plant", img: "src/assets/images/4.jpg" },
-    { title: "Crusher Portable", img: "src/assets/images/3.jpg" },
-    { title: "Conveyor System", img: "src/assets/images/2.jpg" },
-    { title: "Iron Sand Processing Plant", img: "src/assets/images/5.jpg" },
-    { title: "Fertilizer Plant", img: "src/assets/images/4.jpg" },
-    { title: "Other Factory Machinery", img: "src/assets/images/3.jpg" },
-    { title: "Maintenance", img: "src/assets/images/2.jpg" },
+    { title: "Stone Crusher Plant", img: "1.jpg" },
+    { title: "Coal Crusher Plant", img: "4.jpg" },
+    { title: "Crusher Portable", img: "3.jpg" },
+    { title: "Conveyor System", img: "2.jpg" },
+    { title: "Iron Sand Processing Plant", img: "5.jpg" },
+    { title: "Fertilizer Plant", img: "4.jpg" },
+    { title: "Other Factory Machinery", img: "3.jpg" },
+    { title: "Maintenance", img: "2.jpg" },
   ];
 
   const videos = [
