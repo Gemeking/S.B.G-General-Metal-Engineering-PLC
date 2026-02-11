@@ -6,7 +6,7 @@ export default function About() {
     <section className="min-h-screen bg-[#e8e3d9] text-gray-900 py-20 relative">
 
       {/* PAPER TEXTURE */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')]" />
+      <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://i.ytimg.com/vi/C6bhKMwZRXw/hq720.jpg?sqp=-oaymwE7CK4FEIIDSFryq4qpAy0IARUAAAAAGAElAADIQj0AgKJD8AEB-AH-CYAC0AWKAgwIABABGGUgZShlMA8=&rs=AOn4CLAjkhIb4beZXa4O066pdt3QVFqRAg')]" />
 
       <div className="max-w-7xl mx-auto px-6 relative">
 
@@ -34,7 +34,7 @@ export default function About() {
             p-4
           ">
             <img
-              src="/about.jpg" // 👉 you replace
+              src="/manufacturing-bg.jpg" // 👉 you replace
               alt="Factory"
               className="w-full h-[400px] object-cover border-2 border-gray-700"
             />
