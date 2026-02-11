@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+
 export default function Projects() {
   const projects = [
     { title: "Stone Crusher Plant", img: "src/assets/images/1.jpg" },
