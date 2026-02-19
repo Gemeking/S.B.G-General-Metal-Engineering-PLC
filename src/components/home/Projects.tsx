@@ -5,11 +5,10 @@ export default function Projects() {
     { title: "Stone Crusher Plant", img: "1.jpg" },
     { title: "Coal Crusher Plant", img: "4.jpg" },
     { title: "Crusher Portable", img: "3.jpg" },
-    { title: "Conveyor System", img: "2.jpg" },
     { title: "Iron Sand Processing Plant", img: "5.jpg" },
     { title: "Fertilizer Plant", img: "4.jpg" },
     { title: "Other Factory Machinery", img: "3.jpg" },
-    { title: "Maintenance", img: "2.jpg" },
+    
   ];
 
   const videos = [
