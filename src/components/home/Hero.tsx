@@ -28,7 +28,7 @@ export default function Hero() {
         {/* Title - Visible only on mobile with awesome animation */}
         <h1 className="text-5xl md:text-7xl font-extrabold uppercase tracking-widest mb-4 md:hidden animate-fade-in-up animation-delay-200 text-shadow-md">
           <span className="block text-blue-800">S.B.G</span>
-          <span className="block text-gray-800">METAL ENGINEERING</span>
+          <span className="block text-gray-800">GENERAL METAL ENGINEERING</span>
         </h1>
 
         {/* Divider - With metallic shine */}
