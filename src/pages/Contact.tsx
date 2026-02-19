@@ -48,7 +48,7 @@ export default function Contact() {
             <div className="space-y-4 font-bold text-lg">
 
               <p>📞 +251 911 225990</p>
-              <p>📞 +251 911 128814</p>
+              <p>📞 +251 911 610852</p>
 
               <p>✉ ksmon369@gmail.com</p>
 

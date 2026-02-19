@@ -48,7 +48,7 @@ export default function Footer() {
             <p className="font-semibold">
               📞 +251 911 225990  
               <br />
-              📞 +251 911 128814
+              📞 +251 911 610852
             </p>
 
             {/* EMAIL BUTTON */}
