@@ -145,12 +145,12 @@ export default function Contact() {
     "
   >
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12087.716396750946!2d38.7549295!3d8.964422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOMKwNTgnNTEuOSJOIDM4wrA0NSc1MC44Ilc!5e0!3m2!1sen!2set!4v1700000000000!5m2!1sen!2set"
-      className="w-full h-[350px] border-0"
-      allowFullScreen
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-    />
+  src="https://www.google.com/maps?q=8.964464705960772,38.764144553539566&z=15&output=embed"
+  className="w-full h-[350px] border-0"
+  allowFullScreen
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+/>
   </div>
 </div>
 
