@@ -6,40 +6,48 @@ export default function Hero() {
       {/* Background */}
       
       <div className="absolute inset-0">
-        {/* Background Image - Replace with actual manufacturing-themed image */}
+        {/* Mobile Background */}
         <img
-          src="bg.png" // Assume this is a metallic/industrial background image
-          alt="Industrial Background"
-          className="w-full h-full object-cover filter brightness-100"
+          src="mg.png"
+          alt="Industrial Background Mobile"
+          className="w-full h-full object-cover filter brightness-100 md:hidden"
         />
-        {/* Gradient Overlay for depth and readability - adjusted for light theme with metallic feel */}
+
+        {/* Desktop Background */}
+        <img
+          src="bg.png"
+          alt="Industrial Background"
+          className="hidden md:block w-full h-full object-cover filter brightness-100"
+        />
+
+        {/* Gradient Overlay for depth and readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-200/20 to-gray-400/30 opacity-70" />
       </div>
 
-      {/* Content - Moved a little below with added margin-top */}
+      {/* Content */}
       <div className="relative z-10 container mx-auto px-6 py-12 text-center max-w-5xl mt-20 md:mt-32">
-        {/* Logo - Visible only on mobile with awesome animation */}
+        {/* Logo */}
         <img
           src="logo.png"
           alt="S.B.G"
           className="mx-auto mb-8 w-32 h-32 object-contain filter drop-shadow-2xl md:hidden animate-fade-in-up"
         />
 
-        {/* Title - Visible only on mobile with awesome animation */}
+        {/* Title */}
         <h1 className="text-5xl md:text-7xl font-extrabold uppercase tracking-widest mb-4 md:hidden animate-fade-in-up animation-delay-200 text-shadow-md">
           <span className="block text-blue-800">S.B.G</span>
           <span className="block text-gray-800">GENERAL METAL ENGINEERING</span>
         </h1>
 
-        {/* Divider - With metallic shine */}
+        {/* Divider */}
         <div className="w-32 h-1 bg-gradient-to-r from-gray-400 to-blue-700 mx-auto mb-8 rounded-full shadow-md" />
 
-        {/* Subtitle - Enhanced with bold, metallic text */}
+        {/* Subtitle */}
         <p className="text-xl md:text-3xl font-semibold mb-16 text-gray-800 tracking-wide drop-shadow-md animate-fade-in-up animation-delay-400">
          Manufacturing • Precision Fabrication • Industrial Innovation
         </p>
 
-        {/* Stats - Transparent glassmorphism effect for iron-like but see-through */}
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
           {[
             ["20+", "Years Experience"],
@@ -56,16 +64,13 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Buttons - Amazing solid iron-themed with glow and hover */}
+        {/* Buttons */}
         <div className="flex flex-col md:flex-row justify-center gap-6 animate-fade-in-up animation-delay-600">
-        
-<Link to="/contact">
-  <button className="px-10 py-4 bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-900 text-white font-bold uppercase rounded-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95">
-    GET QUOTE
-  </button>
-</Link>
-
-          
+          <Link to="/contact">
+            <button className="px-10 py-4 bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-900 text-white font-bold uppercase rounded-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95">
+              GET QUOTE
+            </button>
+          </Link>
         </div>
       </div>
     </section>
