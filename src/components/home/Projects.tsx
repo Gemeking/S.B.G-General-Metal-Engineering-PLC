@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 
 export default function Projects() {
   const projects = [
-    { title: "Stone Crusher Plant", img: "1.jpg" },
-    { title: "Coal Crusher Plant", img: "4.jpg" },
-    { title: "Crusher Portable", img: "3.jpg" },
-    { title: "Iron Sand Processing Plant", img: "5.jpg" },
-    { title: "Fertilizer Plant", img: "4.jpg" },
-    { title: "Other Factory Machinery", img: "3.jpg" },
+    { title: "", img: "1.jpg" },
+    { title: "", img: "4.jpg" },
+    { title: "", img: "3.jpg" },
+    { title: "", img: "5.jpg" },
+    { title: "", img: "4.jpg" },
+    { title: "", img: "3.jpg" },
     
   ];
 
