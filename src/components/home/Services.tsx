@@ -1,5 +1,22 @@
+import { Link } from "react-router-dom";
+
+// Define TypeScript interfaces
+interface Service {
+  id: number;
+  title: string;
+  shortDescription: string;
+  description: string;
+  keywords: string[];
+  icon: string;
+  benefits: string[];
+}
+
+interface ServiceCardProps {
+  service: Service;
+}
+
 export default function Services() {
-  const services = [
+  const services: Service[] = [
     { 
       id: 1, 
       title: "Stone Crusher Plant", 
@@ -78,7 +95,7 @@ export default function Services() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "itemListElement": services.map((service, index) => ({
+    "itemListElement": services.map((service: Service, index: number) => ({
       "@type": "ListItem",
       "position": index + 1,
       "item": {
@@ -134,7 +151,7 @@ export default function Services() {
 
         {/* Grid */}
         <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-10">
-          {services.map((service) => (
+          {services.map((service: Service) => (
             <ServiceCard key={service.id} service={service} />
           ))}
         </div>
@@ -143,7 +160,7 @@ export default function Services() {
         <div className="container mx-auto px-6 mt-16 text-center relative z-10">
           <p className="text-gray-400 text-sm">
             <span className="font-semibold text-yellow-400">Service Categories:</span>{" "}
-            {services.map(s => s.title).join(" • ")}
+            {services.map((s: Service) => s.title).join(" • ")}
           </p>
         </div>
       </section>
@@ -151,8 +168,8 @@ export default function Services() {
   );
 }
 
-// Extracted ServiceCard component for better organization
-function ServiceCard({ service }) {
+// ServiceCard component with proper typing
+function ServiceCard({ service }: ServiceCardProps) {
   return (
     <div 
       className="group h-[350px]"
@@ -201,7 +218,7 @@ function ServiceCard({ service }) {
 
           {/* Keywords as hidden meta tags */}
           <div className="hidden">
-            {service.keywords.map((keyword, idx) => (
+            {service.keywords.map((keyword: string, idx: number) => (
               <meta key={idx} itemProp="keywords" content={keyword} />
             ))}
           </div>
@@ -227,10 +244,10 @@ function ServiceCard({ service }) {
             {service.shortDescription}
           </p>
 
-          {/* Benefits list */}
+          {/* Benefits list - FIXED WITH TYPES */}
           {service.benefits && (
             <ul className="text-xs space-y-2">
-              {service.benefits.map((benefit, idx) => (
+              {service.benefits.map((benefit: string, idx: number) => (
                 <li key={idx} className="flex items-start">
                   <span className="mr-2 text-black font-bold">✓</span> 
                   <span>{benefit}</span>

@@ -71,7 +71,7 @@ export default function Contact() {
   };
 
   // Form submission handler (prevents default for now)
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // You can add form submission logic here
     // For now, it just prevents page reload
@@ -280,13 +280,13 @@ export default function Contact() {
                 aria-label="Your message"
               />
 
-              {/* Hidden honeypot field for spam prevention (good for SEO) */}
+              {/* Hidden honeypot field for spam prevention - FIXED HERE */}
               <input
                 type="text"
                 name="honeypot"
                 className="hidden"
                 aria-hidden="true"
-                tabIndex="-1"
+                tabIndex={-1}  
               />
 
               <button
