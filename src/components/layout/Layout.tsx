@@ -9,7 +9,7 @@ export default function Layout({ children }: Props) {
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: "url('/manufacturing-bg.jpg')" }}
+      style={{ backgroundImage: "url('/bg2.png')" }}
     >
       <Navbar />
 

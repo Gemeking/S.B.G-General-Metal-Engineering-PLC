@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 
 export default function Projects() {
   const projects = [
-    { title: "", img: "1.jpg" },
-    { title: "", img: "4.jpg" },
-    { title: "", img: "3.jpg" },
-    { title: "", img: "5.jpg" },
-    { title: "", img: "4.jpg" },
-    { title: "", img: "3.jpg" },
-    
+    { img: "1.jpg" },
+    { img: "4.jpg" },
+    { img: "3.jpg" },
+    { img: "5.jpg" },
+    { img: "4.jpg" },
+    { img: "3.jpg" },
   ];
 
   const videos = [
-    { title: "Video 1", url: "https://www.youtube.com/embed/C6bhKMwZRXw" },
-    { title: "Video 2", url: "https://www.youtube.com/embed/TRXTORS-iII" },
-    { title: "Video 3", url: "https://www.youtube.com/embed/rc-a-VGm4KM" },
-    { title: "Video 4", url: "https://www.youtube.com/embed/s8b1W1h-fX4" },
+    { url: "https://www.youtube.com/embed/C6bhKMwZRXw" },
+    { url: "https://www.youtube.com/embed/TRXTORS-iII" },
+    { url: "https://www.youtube.com/embed/rc-a-VGm4KM" },
+    { url: "https://www.youtube.com/embed/s8b1W1h-fX4" },
   ];
 
   const [currentProject, setCurrentProject] = useState(0);
@@ -23,7 +22,7 @@ export default function Projects() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentProject((prev) => (prev + 1) % projects.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, []);
 
@@ -39,121 +38,124 @@ export default function Projects() {
     <section className=" py-20 text-white
    backdrop-blur-lg
 ">
+      {/* Glow Effect */}
+      <div className="absolute top-0 left-1/2 w-[500px] h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse"></div>
 
       {/* HEADER */}
-      <div className="text-center mb-12">
-        <h1 className="text-5xl font-extrabold uppercase tracking-widest">
+      <div className="text-center mb-20 relative z-10">
+        <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest
+                       bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500
+                       bg-clip-text text-transparent">
           PROJECTS & VIDEOS
         </h1>
+        <div className="w-40 h-[3px] bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 mx-auto mt-6 animate-pulse" />
       </div>
 
-      {/* ================= YOUTUBE ================= */}
-      <div className="container mx-auto px-6 mb-16">
-        <h2 className="text-3xl font-bold mb-6 text-center">
-          Watch Our Videos
-        </h2>
+      {/* ================= VIDEOS ================= */}
+      <div className="container mx-auto px-6 mb-24 relative z-10">
 
-        {/* Subscribe */}
         <div className="text-center mb-8">
           <a
             href="https://www.youtube.com/@sbgcrusher-Ethiopia"
             target="_blank"
-            className="bg-red-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-red-700"
+            className="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 
+                       hover:scale-110 transition duration-300 
+                       rounded-xl font-bold shadow-lg"
           >
             Subscribe on YouTube
           </a>
         </div>
 
-        {/* Embedded Videos */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {videos.map((v, i) => (
-            <iframe
-              key={i}
-              className="w-full h-60 rounded shadow-lg"
-              src={v.url}
-              title={v.title}
-              allowFullScreen
-            />
+            <div key={i} className="overflow-hidden rounded-2xl shadow-2xl hover:scale-105 transition duration-500">
+              <iframe
+                className="w-full h-60"
+                src={v.url}
+                allowFullScreen
+              />
+            </div>
           ))}
         </div>
       </div>
 
-      {/* ================= SOCIAL MEDIA ================= */}
-      <div className="container mx-auto px-6 mb-16 text-center">
-        <h2 className="text-3xl font-bold mb-6">Join Us on Social Media</h2>
-
-        <div className="flex justify-center gap-8">
-
-          {/* Instagram */}
-          <a href="https://instagram.com" target="_blank">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
-              className="w-12 hover:scale-110 transition"
-            />
-          </a>
-
-          {/* WhatsApp */}
-          <a href="https://wa.me/251XXXXXXXXX" target="_blank">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-              className="w-12 hover:scale-110 transition"
-            />
-          </a>
-
-          {/* TikTok */}
-          <a href="https://www.tiktok.com/@sbg2341" target="_blank">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"
-              className="w-12 hover:scale-110 transition"
-            />
-          </a>
-
-        </div>
-      </div>
-
       {/* ================= PROJECT SLIDER ================= */}
-      <div className="container mx-auto px-6">
-        <div className="relative border-4 border-gray-800 p-4 bg-gray-200 shadow-xl">
+      <div className="container mx-auto px-6 relative z-10">
+
+        <div className="relative rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(255,215,0,0.3)]">
+
+          {/* IMAGE */}
           <img
             src={projects[currentProject].img}
-            className="w-full h-[450px] object-cover"
+            className="w-full h-[500px] object-cover transition-all duration-700 scale-100 hover:scale-105"
           />
 
-          <div className="absolute bottom-4 left-4 bg-black text-white px-6 py-2">
-            {projects[currentProject].title}
-          </div>
+          {/* Overlay Glow */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
+          {/* Buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 bg-black text-white px-4 py-2"
+            className="absolute left-6 top-1/2 -translate-y-1/2 
+                       px-5 py-3 rounded-full
+                       bg-gradient-to-r from-yellow-500 to-amber-600
+                       text-black font-bold shadow-lg
+                       hover:scale-110 transition duration-300"
           >
             ◀
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 bg-black text-white px-4 py-2"
+            className="absolute right-6 top-1/2 -translate-y-1/2 
+                       px-5 py-3 rounded-full
+                       bg-gradient-to-r from-yellow-500 to-amber-600
+                       text-black font-bold shadow-lg
+                       hover:scale-110 transition duration-300"
           >
             ▶
           </button>
         </div>
 
         {/* THUMBNAILS */}
-        <div className="mt-10 flex gap-4 overflow-x-auto">
+        <div className="mt-12 flex gap-6 overflow-x-auto pb-4">
           {projects.map((p, i) => (
             <img
               key={i}
               src={p.img}
               onClick={() => setCurrentProject(i)}
-              className={`w-40 h-24 object-cover cursor-pointer border-4 ${
-                currentProject === i
-                  ? "border-black scale-110"
-                  : "border-gray-400 opacity-70"
-              }`}
+              className={`w-44 h-28 object-cover rounded-xl cursor-pointer 
+                transition-all duration-500 
+                ${
+                  currentProject === i
+                    ? "scale-110 ring-4 ring-yellow-500 shadow-[0_0_20px_rgba(255,215,0,0.6)]"
+                    : "opacity-60 hover:opacity-100 hover:scale-105"
+                }`}
+            />
+          ))}
+        </div>
+
+      </div>
+
+      {/* ================= SOCIAL ================= */}
+      <div className="container mx-auto px-6 mt-24 text-center relative z-10">
+
+        <div className="flex justify-center gap-10">
+
+          {[
+            "https://cdn-icons-png.flaticon.com/512/2111/2111463.png",
+            "https://cdn-icons-png.flaticon.com/512/733/733585.png",
+            "https://cdn-icons-png.flaticon.com/512/3046/3046121.png",
+          ].map((icon, i) => (
+            <img
+              key={i}
+              src={icon}
+              className="w-14 hover:scale-125 hover:rotate-6 transition duration-300 cursor-pointer"
             />
           ))}
         </div>
       </div>
+
     </section>
   );
 }

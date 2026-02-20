@@ -12,7 +12,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/">
             <img
-              src="logo.png"
+              src="iconic.png"
               alt="S.B.G"
               className="h-16 md:h-24 w-auto animate-pulse"
             />

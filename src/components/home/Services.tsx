@@ -1,5 +1,3 @@
-
-
 export default function Services() {
   const services = [
     { id: 1, title: "Stone Crusher Plant", description: "High-performance crushing solutions for stone and aggregate processing, designed for durability and efficiency in demanding environments." },
@@ -13,66 +11,109 @@ export default function Services() {
   ];
 
   return (
-   <section className=" py-20 text-white   backdrop-blur-lg
+    <section className=" py-20 text-white
+   backdrop-blur-lg
 ">
-     
+      {/* Glow */}
+      <div className="absolute top-0 left-1/2 w-[500px] h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse"></div>
 
-      {/* HEADER */}
-      <div className="container mx-auto px-6 text-center mb-16 relative">
-        <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest mb-4 ">
+      {/* Header */}
+      <div className="container mx-auto px-6 text-center mb-20 relative z-10">
+        <h1 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest mb-6 
+                       bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500
+                       bg-clip-text text-transparent">
           OUR SERVICES
         </h1>
 
-        <div className="w-40 h-[3px] bg-gradient-to-r from-gray-700 via-gray-400 to-gray-700 mx-auto mb-6" />
+        <div className="w-40 h-[3px] bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 mx-auto mb-6 animate-pulse" />
 
-        <p className="text-xl max-w-3xl mx-auto  font-medium">
+        <p className="text-xl max-w-3xl mx-auto text-gray-300">
           Precision-engineered industrial solutions built with strength,
           reliability and real-world experience.
         </p>
       </div>
 
-      {/* GRID */}
-      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+      {/* Grid */}
+      <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 relative z-10">
 
         {services.map((service) => (
           <div
             key={service.id}
-            className="
-              relative p-8 
-              bg-gradient-to-b from-gray-300 to-gray-100
-              border-2 border-gray-700
-              shadow-[6px_6px_0px_rgba(0,0,0,0.4)]
-              hover:shadow-[10px_10px_0px_rgba(0,0,0,0.5)]
-              transition-all duration-300
-              hover:-translate-y-1
-            "
+            className="group relative h-[320px]"
+            style={{ perspective: "1000px" }}
           >
+            {/* Card Inner */}
+            <div
+              className="relative w-full h-full transition-transform duration-700"
+              style={{
+                transformStyle: "preserve-3d",
+              }}
+            >
+              {/* FRONT */}
+              <div
+                className="absolute w-full h-full 
+                           bg-white/10 backdrop-blur-xl 
+                           border border-yellow-400/30
+                           rounded-2xl p-8 shadow-2xl
+                           flex flex-col justify-center
+                           transition-transform duration-700
+                           group-hover:rotate-y-180"
+                style={{
+                  backfaceVisibility: "hidden",
+                  transformStyle: "preserve-3d",
+                }}
+              >
+                <div className="text-4xl font-extrabold 
+                                bg-gradient-to-r from-yellow-300 to-amber-500
+                                bg-clip-text text-transparent mb-4">
+                  {service.id}
+                </div>
 
-            {/* METAL NUMBER PLATE */}
-            <div className="
-              absolute -top-4 -left-4 
-              w-12 h-12
-              bg-gradient-to-br from-gray-600 to-gray-900
-              text-white font-bold text-lg
-              flex items-center justify-center
-              border border-black
-              shadow-md
-            ">
-              {service.id}
+                <h2 className="text-xl font-bold text-white uppercase">
+                  {service.title}
+                </h2>
+              </div>
+
+              {/* BACK */}
+              <div
+                className="absolute w-full h-full 
+                           bg-gradient-to-br from-yellow-500 to-amber-600
+                           rounded-2xl p-8 text-black shadow-2xl
+                           flex flex-col justify-center
+                           transition-transform duration-700"
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                }}
+              >
+                <h2 className="text-lg font-bold mb-4 uppercase">
+                  {service.title}
+                </h2>
+
+                <p className="text-sm leading-relaxed">
+                  {service.description}
+                </p>
+              </div>
+
+              {/* Hover Rotate Effect */}
+              <div
+                className="absolute inset-0 transition-transform duration-700 group-hover:rotate-y-180"
+                style={{
+                  transformStyle: "preserve-3d",
+                }}
+              ></div>
+
             </div>
 
-            {/* TITLE */}
-            <h2 className="text-2xl font-extrabold mb-4 mt-4 uppercase tracking-wide text-gray-800">
-              {service.title}
-            </h2>
+            {/* Real Flip Rotation Applied Here */}
+            <style>
+              {`
+                .group:hover > div {
+                  transform: rotateY(180deg);
+                }
+              `}
+            </style>
 
-            {/* DESCRIPTION */}
-            <p className="text-gray-700 leading-relaxed text-[15px]">
-              {service.description}
-            </p>
-
-            {/* METAL STRIP */}
-            <div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-gray-800 via-gray-500 to-gray-800" />
           </div>
         ))}
       </div>

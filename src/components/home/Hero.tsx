@@ -2,53 +2,34 @@ import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-white text-gray-900 overflow-hidden">
-      {/* Background */}
-      
-      <div className="absolute inset-0">
-        {/* Mobile Background */}
-        <img
-          src="mg.png"
-          alt="Industrial Background Mobile"
-          className="w-full h-full object-cover filter brightness-100 md:hidden"
-        />
+    <section className=" py-20 text-white
+   backdrop-blur-lg
+">
 
-        {/* Desktop Background */}
-        <img
-          src="bg.png"
-          alt="Industrial Background"
-          className="hidden md:block w-full h-full object-cover filter brightness-100"
-        />
+      {/* Glow */}
+      <div className="absolute top-0 left-1/2 w-[500px] h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse"></div>
 
-        {/* Gradient Overlay for depth and readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-200/20 to-gray-400/30 opacity-70" />
-      </div>
+      <div className="relative z-10 container mx-auto text-center max-w-5xl">
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 py-12 text-center max-w-5xl mt-20 md:mt-32">
         {/* Logo */}
         <img
-          src="logo.png"
+          src="/iconic.png"
           alt="S.B.G"
-          className="mx-auto mb-8 w-32 h-32 object-contain filter drop-shadow-2xl md:hidden animate-fade-in-up"
+          className="mx-auto w-120 h-110 object-contain drop-shadow-[0_0_40px_rgba(255,215,0,0.8)] animate-float"
         />
 
-        {/* Title */}
-        <h1 className="text-5xl md:text-7xl font-extrabold uppercase tracking-widest mb-4 md:hidden animate-fade-in-up animation-delay-200 text-shadow-md">
-          <span className="block text-blue-800">S.B.G</span>
-          <span className="block text-gray-800">GENERAL METAL ENGINEERING</span>
-        </h1>
-
         {/* Divider */}
-        <div className="w-32 h-1 bg-gradient-to-r from-gray-400 to-blue-700 mx-auto mb-8 rounded-full shadow-md" />
+        <div className="w-40 h-1 bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-600 mx-auto my-8 rounded-full animate-pulse"></div>
 
         {/* Subtitle */}
-        <p className="text-xl md:text-3xl font-semibold mb-16 text-gray-800 tracking-wide drop-shadow-md animate-fade-in-up animation-delay-400">
-         Manufacturing • Precision Fabrication • Industrial Innovation
+        <p className="text-xl md:text-3xl font-semibold mb-16 tracking-wide 
+                      bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500
+                      bg-clip-text text-transparent animate-fadeInUp">
+          Manufacturing • Precision Fabrication • Industrial Innovation
         </p>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-16">
           {[
             ["20+", "Years Experience"],
             ["200+", "Projects"],
@@ -56,22 +37,36 @@ export default function Hero() {
           ].map(([num, label]) => (
             <div
               key={label}
-              className="flex flex-col items-center p-6 bg-white/10 backdrop-blur-md rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 border border-gray-400/20"
+              className="flex flex-col items-center p-8 
+                         bg-white/10 backdrop-blur-xl 
+                         rounded-2xl shadow-2xl
+                         border border-yellow-400/30
+                         hover:scale-110 hover:shadow-yellow-500/50
+                         transition-all duration-500"
             >
-              <div className="text-4xl md:text-5xl font-extrabold text-blue-800 mb-2 drop-shadow">{num}</div>
-              <div className="text-sm md:text-base uppercase tracking-widest text-gray-700 font-medium">{label}</div>
+              <div className="text-5xl font-extrabold 
+                              bg-gradient-to-r from-yellow-300 to-amber-500
+                              bg-clip-text text-transparent mb-3">
+                {num}
+              </div>
+              <div className="text-sm uppercase tracking-widest text-gray-300">
+                {label}
+              </div>
             </div>
           ))}
         </div>
 
-        {/* Buttons */}
-        <div className="flex flex-col md:flex-row justify-center gap-6 animate-fade-in-up animation-delay-600">
-          <Link to="/contact">
-            <button className="px-10 py-4 bg-gradient-to-r from-blue-700 to-blue-900 hover:from-blue-800 hover:to-blue-900 text-white font-bold uppercase rounded-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105 active:scale-95">
-              GET QUOTE
-            </button>
-          </Link>
-        </div>
+        {/* Button */}
+        <Link to="/contact">
+          <button className="px-12 py-4 
+                             bg-gradient-to-r from-yellow-500 to-amber-600
+                             hover:from-yellow-400 hover:to-amber-500
+                             text-black font-bold uppercase rounded-xl
+                             shadow-[0_0_30px_rgba(255,215,0,0.8)]
+                             hover:scale-110 transition-all duration-300">
+            GET QUOTE
+          </button>
+        </Link>
       </div>
     </section>
   );
