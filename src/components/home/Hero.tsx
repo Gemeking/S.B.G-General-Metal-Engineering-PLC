@@ -74,13 +74,13 @@ export default function Hero() {
             Manufacturing • Precision Fabrication • Industrial Innovation
           </h2>
 
-          {/* Stats with semantic HTML */}
+          {/* Stats with semantic HTML - FIXED: removed unused 'index' parameter */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-16">
             {[
               { number: "20+", label: "Years Experience", description: "Two decades of manufacturing excellence" },
               { number: "200+", label: "Projects", description: "Successful industrial projects completed" },
               { number: "24/7", label: "Support", description: "Round-the-clock customer assistance" }
-            ].map((stat, index) => (
+            ].map((stat) => (  // Removed ', index' since it wasn't being used
               <div
                 key={stat.label}
                 className="flex flex-col items-center p-8 

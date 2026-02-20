@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+// REMOVE THIS LINE - it's not being used
+// import { Link } from "react-router-dom";
 
 // Define TypeScript interfaces
 interface Service {
@@ -244,7 +245,7 @@ function ServiceCard({ service }: ServiceCardProps) {
             {service.shortDescription}
           </p>
 
-          {/* Benefits list - FIXED WITH TYPES */}
+          {/* Benefits list */}
           {service.benefits && (
             <ul className="text-xs space-y-2">
               {service.benefits.map((benefit: string, idx: number) => (
