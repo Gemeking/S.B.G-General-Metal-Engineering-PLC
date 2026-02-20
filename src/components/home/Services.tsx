@@ -1,5 +1,4 @@
 // REMOVE THIS LINE - it's not being used
-// import { Link } from "react-router-dom";
 
 // Define TypeScript interfaces
 interface Service {
