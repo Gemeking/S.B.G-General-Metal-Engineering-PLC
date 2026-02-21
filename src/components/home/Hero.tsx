@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 export default function Hero() {
   return (
     <section className=" py-20 text-white
-   backdrop-blur-lg
+  
 ">
 
-      {/* Glow */}
-      <div className="absolute top-0 left-1/2 w-[500px] h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse"></div>
+     {/* Glow Background */}
+        <div className="absolute top-0 left-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse" aria-hidden="true"></div>
 
       <div className="relative z-10 container mx-auto text-center max-w-5xl">
 

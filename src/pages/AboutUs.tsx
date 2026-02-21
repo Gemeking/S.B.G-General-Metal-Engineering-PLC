@@ -70,7 +70,7 @@ export default function About() {
       {/* These will be picked up by search engines from the HTML head section */}
       
       <section 
-        className="py-12 md:py-20 text-white backdrop-blur-lg overflow-x-hidden"
+        className="py-12 md:py-20 text-white overflow-x-hidden"
         aria-label="About Us - Company Information"
       >
         {/* Glow Background */}
@@ -101,7 +101,7 @@ export default function About() {
               <div className="absolute inset-0 rounded-2xl md:rounded-3xl bg-gradient-to-br from-yellow-500/20 to-transparent blur-xl opacity-50 group-hover:opacity-70 transition duration-500" aria-hidden="true"></div>
 
               <img
-                src="/manufacturing-bg.jpg"
+                src="/5.jpg"
                 alt="S.B.G General Metal Engineering PLC industrial manufacturing facility with crusher and conveyor equipment in Ethiopia"
                 title="S.B.G Manufacturing facility - State-of-the-art industrial machinery production"
                 className="relative w-full h-[250px] sm:h-[350px] md:h-[450px] object-cover rounded-2xl md:rounded-3xl shadow-[0_0_40px_rgba(255,215,0,0.2)] transition duration-700 group-hover:scale-105"

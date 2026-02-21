@@ -138,12 +138,11 @@ export default function Projects() {
       />
 
       <section 
-        className="py-20 text-white backdrop-blur-lg" 
+        className="py-20 text-white " 
         aria-label="Industrial Projects and Video Portfolio"
       >
-        {/* Glow Effect */}
-        <div className="absolute top-0 left-1/2 w-[500px] h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse" aria-hidden="true"></div>
-
+{/* Glow Background */}
+        <div className="absolute top-0 left-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-yellow-500/20 blur-[120px] rounded-full -translate-x-1/2 animate-pulse" aria-hidden="true"></div>
         {/* HEADER */}
         <div className="text-center mb-20 relative z-10">
           <h2 className="text-5xl md:text-6xl font-extrabold uppercase tracking-widest
@@ -234,19 +233,7 @@ export default function Projects() {
               height="500"
             />
 
-            {/* Project info overlay */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-8">
-              <h4 className="text-2xl font-bold text-yellow-400 mb-2">
-                {projects[currentProject].title}
-              </h4>
-              <p className="text-white/90 mb-1">
-                <span className="font-semibold">Location:</span> {projects[currentProject].location}
-              </p>
-              <p className="text-white/80">
-                {projects[currentProject].description}
-              </p>
-            </div>
-
+            
             {/* Overlay Glow */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" aria-hidden="true" />
 

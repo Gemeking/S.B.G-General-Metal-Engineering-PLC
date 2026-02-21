@@ -87,7 +87,7 @@ export default function Contact() {
       />
 
       <section 
-        className="py-12 md:py-20 text-white backdrop-blur-lg overflow-x-hidden"
+        className="py-12 md:py-20 text-white overflow-x-hidden"
         aria-label="Contact Us Page"
       >
         {/* Glow Background */}
