@@ -195,6 +195,7 @@ export default function Projects() {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
 
   const sectionRef = useRef<HTMLElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Type guard to check if product has specifications
   const hasSpecifications = (product: Product): product is ProductWithSpecs => {
@@ -219,6 +220,46 @@ export default function Projects() {
     }
   }, []);
 
+  // Handle escape key press
+  useEffect(() => {
+    const handleEscapeKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isImageViewerOpen) {
+        setIsImageViewerOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleEscapeKey);
+    
+    // Prevent body scroll when modal is open
+    if (isImageViewerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isImageViewerOpen]);
+
+  // Handle click outside modal
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setIsImageViewerOpen(false);
+      }
+    };
+
+    if (isImageViewerOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isImageViewerOpen]);
+
   // Image viewer navigation
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
@@ -232,6 +273,11 @@ export default function Projects() {
     );
   };
 
+  const openImageViewer = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsImageViewerOpen(true);
+  };
+
   return (
     <Layout>
       <motion.section 
@@ -241,7 +287,7 @@ export default function Projects() {
         transition={{ duration: 0.8 }}
         className="min-h-screen text-white relative overflow-y-auto scroll-smooth"
         style={{
-          
+          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
         }}
       >
         {/* Animated Background */}
@@ -434,10 +480,7 @@ export default function Projects() {
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 className="relative mb-8 rounded-2xl overflow-hidden group/image cursor-pointer"
-                onClick={() => {
-                  setCurrentImageIndex(selectedProduct.images.indexOf(activeImage));
-                  setIsImageViewerOpen(true);
-                }}
+                onClick={() => openImageViewer(selectedProduct.images.indexOf(activeImage))}
               >
                 <motion.img
                   key={activeImage}
@@ -445,11 +488,12 @@ export default function Projects() {
                   alt={selectedProduct.name}
                   className="w-full h-[500px] object-cover transform group-hover/image:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/image:opacity-100 
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/image:opacity-100 
                               transition-opacity duration-300 flex items-center justify-center">
-                  <span className="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold">
-                    Click to Zoom
-                  </span>
+                  <div className="bg-yellow-400 text-black px-6 py-3 rounded-full font-semibold transform 
+                                scale-90 group-hover/image:scale-100 transition-transform duration-300">
+                    🔍 Click to Zoom
+                  </div>
                 </div>
               </motion.div>
 
@@ -548,65 +592,127 @@ export default function Projects() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
-              onClick={() => setIsImageViewerOpen(false)}
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              style={{
+                background: 'rgba(0, 0, 0, 0.95)',
+                backdropFilter: 'blur(10px)'
+              }}
             >
+              {/* Modal Content */}
               <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.9 }}
+                ref={modalRef}
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 className="relative max-w-7xl w-full mx-4"
-                onClick={(e) => e.stopPropagation()}
               >
-                {/* Close Button */}
-                <button
+                {/* Close Button - X */}
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => setIsImageViewerOpen(false)}
-                  className="absolute -top-12 right-0 text-white hover:text-yellow-400 transition-colors"
+                  className="absolute -top-12 right-0 text-white hover:text-yellow-400 
+                           transition-colors z-50 bg-black/50 rounded-full p-2 
+                           backdrop-blur-sm border border-white/20 hover:border-yellow-400/50"
+                  aria-label="Close"
                 >
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                </button>
+                </motion.button>
 
                 {/* Main Image */}
-                <img
-                  src={selectedProduct.images[currentImageIndex]}
-                  alt={`${selectedProduct.name} - View ${currentImageIndex + 1}`}
-                  className="w-full h-[80vh] object-contain"
-                />
+                <motion.div
+                  key={currentImageIndex}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative"
+                >
+                  <img
+                    src={selectedProduct.images[currentImageIndex]}
+                    alt={`${selectedProduct.name} - View ${currentImageIndex + 1}`}
+                    className="w-full h-[80vh] object-contain rounded-lg"
+                  />
+                </motion.div>
 
                 {/* Navigation Arrows */}
                 {selectedProduct.images.length > 1 && (
                   <>
-                    <button
+                    <motion.button
+                      whileHover={{ scale: 1.1, x: -5 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={prevImage}
                       className="absolute left-4 top-1/2 transform -translate-y-1/2 
-                               bg-white/10 hover:bg-white/20 text-white rounded-full p-3 
-                               transition-all duration-300 backdrop-blur-sm"
+                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4 
+                               transition-all duration-300 backdrop-blur-sm border border-white/20
+                               hover:border-yellow-400/50 group"
+                      aria-label="Previous image"
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                       </svg>
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1, x: 5 }}
+                      whileTap={{ scale: 0.9 }}
                       onClick={nextImage}
                       className="absolute right-4 top-1/2 transform -translate-y-1/2 
-                               bg-white/10 hover:bg-white/20 text-white rounded-full p-3 
-                               transition-all duration-300 backdrop-blur-sm"
+                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4 
+                               transition-all duration-300 backdrop-blur-sm border border-white/20
+                               hover:border-yellow-400/50 group"
+                      aria-label="Next image"
                     >
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
-                    </button>
+                    </motion.button>
                   </>
                 )}
 
                 {/* Image Counter */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
-                              bg-black/50 text-white px-4 py-2 rounded-full backdrop-blur-sm">
+                <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
+                            bg-black/70 text-white px-6 py-3 rounded-full backdrop-blur-sm
+                            border border-white/20 font-semibold"
+                >
                   {currentImageIndex + 1} / {selectedProduct.images.length}
-                </div>
+                </motion.div>
+
+                {/* Thumbnail Strip */}
+                {selectedProduct.images.length > 1 && (
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="absolute -bottom-24 left-1/2 transform -translate-x-1/2 
+                              flex gap-2 p-2 bg-black/50 backdrop-blur-sm rounded-xl
+                              border border-white/10"
+                  >
+                    {selectedProduct.images.map((img, index) => (
+                      <motion.img
+                        key={img}
+                        src={img}
+                        whileHover={{ scale: 1.1, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-16 h-16 object-cover rounded-lg cursor-pointer 
+                                  transition-all duration-300 border-2
+                                  ${currentImageIndex === index 
+                                    ? 'border-yellow-400 scale-110' 
+                                    : 'border-transparent hover:border-yellow-400/50'}`}
+                      />
+                    ))}
+                  </motion.div>
+                )}
               </motion.div>
+
+              {/* Click anywhere outside to close (handled by the modal's container click) */}
             </motion.div>
           )}
         </AnimatePresence>
