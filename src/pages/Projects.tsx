@@ -287,7 +287,7 @@ export default function Projects() {
         transition={{ duration: 0.8 }}
         className="min-h-screen text-white relative overflow-y-auto scroll-smooth"
         style={{
-          background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)'
+          
         }}
       >
         {/* Animated Background */}
@@ -503,7 +503,7 @@ export default function Projects() {
                 animate={{ y: 0, opacity: 1 }}
                 className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-yellow-400/30"
               >
-                {selectedProduct.images.map((img, index) => (
+                {selectedProduct.images.map((img, idx) => (
                   <motion.img
                     key={img}
                     src={img}
@@ -540,12 +540,12 @@ export default function Projects() {
               >
                 <h3 className="text-xl font-semibold text-yellow-400 mb-4">Key Features</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {selectedProduct.features.map((feature, index) => (
+                  {selectedProduct.features.map((feature, idx) => (
                     <motion.div
                       key={feature}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: idx * 0.1 }}
                       className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg 
                                border border-yellow-400/20 hover:border-yellow-400/40 
                                hover:bg-white/10 transition-all duration-300"
@@ -566,12 +566,12 @@ export default function Projects() {
                 >
                   <h3 className="text-xl font-semibold text-yellow-400 mb-4">Technical Specifications</h3>
                   <div className="grid md:grid-cols-2 gap-4">
-                    {selectedProduct.specifications.map((spec: Specification, index: number) => (
+                    {selectedProduct.specifications.map((spec: Specification, idx: number) => (
                       <motion.div
-                        key={index}
+                        key={idx}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: index * 0.1 }}
+                        transition={{ delay: idx * 0.1 }}
                         className="bg-white/5 p-4 rounded-lg border border-yellow-400/20"
                       >
                         <div className="text-yellow-300 font-semibold">{spec.model}</div>
@@ -694,16 +694,16 @@ export default function Projects() {
                               flex gap-2 p-2 bg-black/50 backdrop-blur-sm rounded-xl
                               border border-white/10"
                   >
-                    {selectedProduct.images.map((img, index) => (
+                    {selectedProduct.images.map((img, idx) => (
                       <motion.img
                         key={img}
                         src={img}
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => setCurrentImageIndex(index)}
+                        onClick={() => setCurrentImageIndex(idx)}
                         className={`w-16 h-16 object-cover rounded-lg cursor-pointer 
                                   transition-all duration-300 border-2
-                                  ${currentImageIndex === index 
+                                  ${currentImageIndex === idx 
                                     ? 'border-yellow-400 scale-110' 
                                     : 'border-transparent hover:border-yellow-400/50'}`}
                       />
@@ -711,8 +711,6 @@ export default function Projects() {
                   </motion.div>
                 )}
               </motion.div>
-
-              {/* Click anywhere outside to close (handled by the modal's container click) */}
             </motion.div>
           )}
         </AnimatePresence>
