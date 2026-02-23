@@ -3,10 +3,5 @@
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "vite",
   "outputDirectory": "dist",
-  "devCommand": "npm run dev",
-  "git": {
-    "deploymentEnabled": {
-      "main": true
-    }
-  }
+  "devCommand": "npm run dev"
 }
