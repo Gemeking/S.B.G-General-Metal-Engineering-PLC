@@ -84,6 +84,7 @@ export default function Navbar() {
               {[
                 { name: "Home", path: "/", title: "Return to homepage" },
                 { name: "About Us", path: "/aboutus", title: "Learn about our company and expertise" },
+                { name: "Projects", path: "/projects", title: "discover projects" },
                 { name: "Contact", path: "/contact", title: "Get in touch with our team" }
               ].map((item) => (
                 <NavLink
@@ -148,6 +149,7 @@ export default function Navbar() {
             {[
               { name: "Home", path: "/", description: "Return to homepage" },
               { name: "About", path: "/aboutus", description: "Learn about our company" },
+              { name: "Projects", path: "/projects", title: "discover projects" },
               { name: "Contact", path: "/contact", description: "Contact our team" }
             ].map((item) => (
               <NavLink
