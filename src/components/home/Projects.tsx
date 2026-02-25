@@ -299,7 +299,7 @@ export default function Projects() {
           
           <div className="flex justify-center gap-10">
             <a 
-              href="https://www.instagram.com/sbgcrusher" 
+              href="https://www.instagram.com/sbg.generalmetalengineeringplc?igsh=MTh0NXR2bDhrbnZvMQ==" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:scale-125 hover:rotate-6 transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full"
@@ -333,7 +333,7 @@ export default function Projects() {
             </a>
             
             <a 
-              href="https://www.tiktok.com/@sbgcrusher" 
+              href="https://www.tiktok.com/@sbg.general.metal?_r=1&_t=ZS-94CpR4NkyHw" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hover:scale-125 hover:rotate-6 transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full"
