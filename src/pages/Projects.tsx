@@ -503,7 +503,7 @@ export default function Projects() {
                 animate={{ y: 0, opacity: 1 }}
                 className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-yellow-400/30"
               >
-                {selectedProduct.images.map((img, idx) => (
+                {selectedProduct.images.map((img) => (
                   <motion.img
                     key={img}
                     src={img}
