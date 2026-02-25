@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check:react-deps": "node scripts/verify-react-deps.cjs"
   },
   "dependencies": {
     "framer-motion": "^12.34.3",
