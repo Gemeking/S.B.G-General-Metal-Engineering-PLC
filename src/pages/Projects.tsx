@@ -348,9 +348,7 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-              <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
-                GALLERY
-              </span>
+              
             </motion.h1>
             
             <motion.div
