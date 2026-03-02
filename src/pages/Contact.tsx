@@ -1,6 +1,56 @@
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
 import Layout from "../components/layout/Layout";
 
 export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{
+    type: "success" | "error" | null;
+    message: string;
+  }>({ type: null, message: "" });
+
+  // EmailJS configuration - Replace with your actual credentials
+  const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID"; // Get from EmailJS dashboard
+  const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // Get from EmailJS dashboard
+  const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Get from EmailJS dashboard
+
+  // Form submission handler
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!formRef.current) return;
+
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      // Send email using EmailJS
+      const result = await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.text === "OK") {
+        setSubmitStatus({
+          type: "success",
+          message: "Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.",
+        });
+        formRef.current.reset(); // Clear the form
+      }
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      setSubmitStatus({
+        type: "error",
+        message: "Failed to send message. Please try again or email us directly.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   // Structured data for Contact Page
   const structuredData = {
     "@context": "https://schema.org",
@@ -16,7 +66,7 @@ export default function Contact() {
           "description": "Industrial machinery manufacturer specializing in crusher plants and material handling systems",
           "url": "https://sbgmanufacturing.com",
           "logo": "https://sbgmanufacturing.com/iconic.png",
-          "email": "ksmon369@gmail.com",
+          "email": "sbg.general.metal.engineering.plc@gmail.com",
           "telephone": "+251-911-225990",
           "contactPoint": [
             {
@@ -68,14 +118,6 @@ export default function Contact() {
         ]
       }
     ]
-  };
-
-  // Form submission handler (prevents default for now)
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // You can add form submission logic here
-    // For now, it just prevents page reload
-    alert("Form submission would be handled here. Please use email for now.");
   };
 
   return (
@@ -173,12 +215,12 @@ export default function Contact() {
                 <div className="flex items-start gap-2 break-all">
                   <span className="text-xl" aria-hidden="true">✉</span>
                   <a 
-                    href="mailto:ksmon369@gmail.com" 
+                    href="mailto:sbg.general.metal.engineering.plc@gmail.com" 
                     className="hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded px-1"
-                    aria-label="Email us at ksmon369@gmail.com"
+                    aria-label="Email us at sbg.general.metal.engineering.plc@gmail.com"
                     itemProp="email"
                   >
-                    ksmon369@gmail.com
+                    sbg.general.metal.engineering.plc@gmail.com
                   </a>
                 </div>
               </div>
@@ -194,7 +236,7 @@ export default function Contact() {
               <div className="w-full h-1 bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400 mt-4 md:mt-6" role="presentation" />
 
               <a
-                href="mailto:ksmon369@gmail.com?subject=Inquiry%20for%20S.B.G%20General%20Metal%20Engineering%20PLC%20-%20Industrial%20Machinery&body=I%20am%20interested%20in%20your%20industrial%20machinery%20and%20crusher%20solutions.%20Please%20provide%20more%20information.%0A%0A---%0AWe%20are%20crusher's%20solution!!%0A%0AMy%20Inquiry%3A"
+                href="mailto:sbg.general.metal.engineering.plc@gmail.com?subject=Inquiry%20for%20S.B.G%20General%20Metal%20Engineering%20PLC%20-%20Industrial%20Machinery&body=I%20am%20interested%20in%20your%20industrial%20machinery%20and%20crusher%20solutions.%20Please%20provide%20more%20information.%0A%0A---%0AWe%20are%20crusher's%20solution!!%0A%0AMy%20Inquiry%3A"
                 className="inline-block w-full sm:w-auto text-center px-6 sm:px-8 md:px-10 py-3 md:py-4
                            bg-gradient-to-r from-yellow-500 to-amber-600
                            text-black font-extrabold uppercase tracking-wider text-sm sm:text-base
@@ -212,6 +254,7 @@ export default function Contact() {
 
             {/* RIGHT — FORM */}
             <form 
+              ref={formRef}
               onSubmit={handleSubmit}
               className="relative bg-white/10 backdrop-blur-xl border border-yellow-400/30 rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl space-y-4 md:space-y-6
                          hover:scale-105 hover:shadow-[0_0_40px_rgba(255,215,0,0.4)] transition-all duration-500 order-2 md:order-none"
@@ -226,8 +269,21 @@ export default function Contact() {
 
               <p className="text-sm text-gray-400">Request information about our crusher plants and industrial machinery</p>
 
+              {/* Status Message */}
+              {submitStatus.type && (
+                <div className={`p-4 rounded-lg ${
+                  submitStatus.type === "success" 
+                    ? "bg-green-500/20 border border-green-400 text-green-300" 
+                    : "bg-red-500/20 border border-red-400 text-red-300"
+                }`}>
+                  {submitStatus.message}
+                </div>
+              )}
+
+              {/* Form Fields - Add name attributes for EmailJS */}
               <input
                 type="text"
+                name="from_name"
                 placeholder="Your Name *"
                 required
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
@@ -236,6 +292,7 @@ export default function Contact() {
 
               <input
                 type="email"
+                name="from_email"
                 placeholder="Your Email *"
                 required
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
@@ -244,12 +301,14 @@ export default function Contact() {
 
               <input
                 type="tel"
+                name="from_phone"
                 placeholder="Your Phone Number"
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Your phone number (optional)"
               />
 
               <select
+                name="service_interest"
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Select service of interest"
                 defaultValue=""
@@ -267,12 +326,14 @@ export default function Contact() {
 
               <input
                 type="text"
+                name="subject"
                 placeholder="Subject"
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Message subject"
               />
 
               <textarea
+                name="message"
                 placeholder="Your Message *"
                 required
                 rows={4}
@@ -280,7 +341,7 @@ export default function Contact() {
                 aria-label="Your message"
               />
 
-              {/* Hidden honeypot field for spam prevention - FIXED HERE */}
+              {/* Hidden honeypot field for spam prevention */}
               <input
                 type="text"
                 name="honeypot"
@@ -289,8 +350,16 @@ export default function Contact() {
                 tabIndex={-1}  
               />
 
+              {/* Add hidden field for company email recipient */}
+              <input
+                type="hidden"
+                name="company_email"
+                value="sbg.general.metal.engineering.plc@gmail.com"
+              />
+
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full sm:w-auto px-8 sm:px-10 md:px-12 py-3 md:py-4
                            bg-gradient-to-r from-yellow-500 to-amber-600
                            text-black font-extrabold uppercase tracking-wider text-sm sm:text-base
@@ -299,10 +368,11 @@ export default function Contact() {
                            transition-all duration-300
                            hover:scale-105 hover:shadow-[0_0_30px_rgba(255,215,0,0.8)]
                            active:scale-95
-                           focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+                           focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2
+                           disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 aria-label="Submit quote request"
               >
-                SUBMIT MESSAGE
+                {isSubmitting ? "SENDING..." : "SUBMIT MESSAGE"}
               </button>
 
               <p className="text-xs text-gray-400 mt-2">
