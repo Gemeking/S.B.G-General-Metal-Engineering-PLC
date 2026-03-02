@@ -12,7 +12,7 @@ export default function Footer() {
     "description": "We are crusher's solution!! - Industrial manufacturing and precision fabrication",
     "url": "https://sbgmanufacturing.com",
     "logo": "https://sbgmanufacturing.com/iconic.png",
-    "email": "ksmon369@gmail.com",
+    "email": "sbg.general.metal.engineering.plc@gmail.com",
     "telephone": "+251-911-225990",
     "contactPoint": [
       {
@@ -102,6 +102,13 @@ export default function Footer() {
                   About Us
                 </Link>
                 <Link 
+                  to="/projects" 
+                  className="hover:text-blue-600 hover:translate-x-1 transition-transform focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 rounded px-2 py-1"
+                  aria-label="Learn about S.B.G General Metal Engineering PLC"
+                >
+                  Projects
+                </Link>
+                <Link 
                   to="/contact" 
                   className="hover:text-blue-600 hover:translate-x-1 transition-transform focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 rounded px-2 py-1"
                   aria-label="Contact our team for industrial solutions"
@@ -153,7 +160,7 @@ export default function Footer() {
 
               {/* EMAIL BUTTON */}
               <a
-                href={`mailto:ksmon369@gmail.com?subject=Inquiry%20for%20S.B.G%20General%20Metal%20Engineering%20PLC%20-%20Industrial%20Solutions&body=I%20am%20interested%20in%20your%20industrial%20manufacturing%20services.%20Please%20provide%20more%20information.%0A%0A---%0AWe%20are%20crusher's%20solution!!%0A%0AMy%20Inquiry%3A`}
+                href={`mailto:sbg.general.metal.engineering.plc@gmail.com?subject=Inquiry%20for%20S.B.G%20General%20Metal%20Engineering%20PLC%20-%20Industrial%20Solutions&body=I%20am%20interested%20in%20your%20industrial%20manufacturing%20services.%20Please%20provide%20more%20information.%0A%0A---%0AWe%20are%20crusher's%20solution!!%0A%0AMy%20Inquiry%3A`}
                 className="
                   inline-block mt-2
                   px-6 py-3
