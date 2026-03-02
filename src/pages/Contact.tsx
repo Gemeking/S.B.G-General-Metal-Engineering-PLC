@@ -261,16 +261,7 @@ export default function Contact() {
                 </div>
               )}
 
-              {/* Debug Info */}
-              {import.meta.env.DEV && (
-                <div className="bg-blue-500/20 border border-blue-500 rounded-lg p-3 mt-2">
-                  <p className="text-blue-400 text-xs font-mono">
-                    Service: {SERVICE_ID}<br />
-                    Template: {TEMPLATE_ID}<br />
-                    Public Key: {PUBLIC_KEY ? "✓ Set" : "✗ Missing"}
-                  </p>
-                </div>
-              )}
+              
             </form>
           </div>
         </div>
