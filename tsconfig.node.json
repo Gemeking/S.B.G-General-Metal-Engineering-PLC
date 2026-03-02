@@ -4,7 +4,10 @@
     "target": "ES2023",
     "lib": ["ES2023"],
     "module": "ESNext",
+
+    /* ✅ Node types ONLY here (for vite.config.ts) */
     "types": ["node"],
+
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -14,11 +17,10 @@
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Linting */
+    /* Strict */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
