@@ -292,7 +292,7 @@ export default function Projects() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen  to-black text-white"
+        className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white"
       >
         {/* Dynamic Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -322,8 +322,8 @@ export default function Projects() {
             }}
             className="absolute bottom-20 -right-20 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"
           />
-          {/* Simple dot pattern instead of complex SVG */}
-          <div className="absolute inset-0 bg-black opacity-20" 
+          {/* Simple dot pattern */}
+          <div className="absolute inset-0 opacity-20" 
                style={{
                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,215,0,0.15) 1px, transparent 0)',
                  backgroundSize: '40px 40px'
@@ -348,7 +348,9 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-              
+              <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+                GALLERY
+              </span>
             </motion.h1>
             
             <motion.div
@@ -404,7 +406,7 @@ export default function Projects() {
             transition={{ delay: 0.4 }}
             className="flex flex-wrap justify-center gap-4 mb-8"
           >
-            {projectData.map((cat, index) => (
+            {projectData.map((cat) => (
               <motion.button
                 key={cat.category}
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -442,12 +444,11 @@ export default function Projects() {
               transition={{ delay: 0.5 }}
               className="flex flex-wrap justify-center gap-3 mb-16"
             >
-              {selectedCategory.types.map((type, index) => (
+              {selectedCategory.types.map((type) => (
                 <motion.button
                   key={type.typeName}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
