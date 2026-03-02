@@ -189,20 +189,17 @@ export default function Projects() {
   // ================================
   const [selectedCategory, setSelectedCategory] = useState<Category>(projectData[0]);
   const [selectedType, setSelectedType] = useState<Type>(projectData[0].types[0]);
-  const [selectedProduct, setSelectedProduct] = useState<Product>(
-    projectData[0].types[0].products[0]
-  );
-  const [activeImage, setActiveImage] = useState<string>(
-    projectData[0].types[0].products[0].images[0]
-  );
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [activeImage, setActiveImage] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState<boolean>(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-  const [isGridView, setIsGridView] = useState<boolean>(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [activeTab, setActiveTab] = useState<'details' | 'specs'>('details');
 
   const modalRef = useRef<HTMLDivElement>(null);
-  const galleryRef = useRef<HTMLDivElement>(null);
+  const imageViewerRef = useRef<HTMLDivElement>(null);
 
   // Get all products for search
   const allProducts = projectData.flatMap(category => 
@@ -232,14 +229,18 @@ export default function Projects() {
   // Handle escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isImageViewerOpen) {
-        setIsImageViewerOpen(false);
+      if (e.key === 'Escape') {
+        if (isImageViewerOpen) {
+          setIsImageViewerOpen(false);
+        } else if (isModalOpen) {
+          setIsModalOpen(false);
+        }
       }
     };
 
     document.addEventListener('keydown', handleEscapeKey);
     
-    if (isImageViewerOpen) {
+    if (isModalOpen || isImageViewerOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -249,36 +250,50 @@ export default function Projects() {
       document.removeEventListener('keydown', handleEscapeKey);
       document.body.style.overflow = 'unset';
     };
-  }, [isImageViewerOpen]);
+  }, [isModalOpen, isImageViewerOpen]);
 
   // Handle click outside modal
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node) && isModalOpen) {
+        setIsModalOpen(false);
+      }
+      if (imageViewerRef.current && !imageViewerRef.current.contains(e.target as Node) && isImageViewerOpen) {
         setIsImageViewerOpen(false);
       }
     };
 
-    if (isImageViewerOpen) {
+    if (isModalOpen || isImageViewerOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isImageViewerOpen]);
+  }, [isModalOpen, isImageViewerOpen]);
 
   // Image viewer navigation
   const nextImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === selectedProduct.images.length - 1 ? 0 : prev + 1
-    );
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === selectedProduct.images.length - 1 ? 0 : prev + 1
+      );
+    }
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => 
-      prev === 0 ? selectedProduct.images.length - 1 : prev - 1
-    );
+    if (selectedProduct) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? selectedProduct.images.length - 1 : prev - 1
+      );
+    }
+  };
+
+  const openProductModal = (product: Product) => {
+    setSelectedProduct(product);
+    setActiveImage(product.images[0]);
+    setActiveTab('details');
+    setIsModalOpen(true);
   };
 
   const openImageViewer = (index: number) => {
@@ -292,7 +307,7 @@ export default function Projects() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen  to-black text-white"
+        className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white"
       >
         {/* Dynamic Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -332,7 +347,7 @@ export default function Projects() {
         </div>
 
         {/* Main Content */}
-        <div ref={galleryRef} className="relative z-10 max-w-7xl mx-auto px-4 py-12">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
           {/* Hero Section */}
           <motion.div
             initial={{ y: -50, opacity: 0 }}
@@ -348,7 +363,7 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-              
+              <span className="text-white"> GALLERY</span>
             </motion.h1>
             
             <motion.div
@@ -394,6 +409,20 @@ export default function Projects() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
+              {searchQuery && (
+                <motion.button
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-5 top-1/2 transform -translate-y-1/2 
+                           text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              )}
             </div>
           </motion.div>
 
@@ -412,8 +441,7 @@ export default function Projects() {
                 onClick={() => {
                   setSelectedCategory(cat);
                   setSelectedType(cat.types[0]);
-                  setSelectedProduct(cat.types[0].products[0]);
-                  setActiveImage(cat.types[0].products[0].images[0]);
+                  setSearchQuery("");
                 }}
                 className={`px-8 py-4 rounded-full font-semibold transition-all duration-500 
                          backdrop-blur-xl border-2 relative overflow-hidden group
@@ -451,8 +479,7 @@ export default function Projects() {
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     setSelectedType(type);
-                    setSelectedProduct(type.products[0]);
-                    setActiveImage(type.products[0].images[0]);
+                    setSearchQuery("");
                   }}
                   className={`px-6 py-3 rounded-full transition-all duration-300 relative overflow-hidden
                            ${selectedType.typeName === type.typeName
@@ -466,14 +493,21 @@ export default function Projects() {
             </motion.div>
           )}
 
+          {/* Results Count */}
+          {searchQuery && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center mb-8 text-gray-400"
+            >
+              Found {filteredProducts.length} results for "{searchQuery}"
+            </motion.div>
+          )}
+
           {/* Gallery Grid */}
           <motion.div
             layout
-            className={`grid gap-8 ${
-              isGridView 
-                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
-                : "grid-cols-1"
-            }`}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             <AnimatePresence mode="popLayout">
               {filteredProducts.map((product, index) => (
@@ -491,17 +525,7 @@ export default function Projects() {
                   whileHover={{ y: -10 }}
                   onHoverStart={() => setHoveredProduct(product.name)}
                   onHoverEnd={() => setHoveredProduct(null)}
-                  onClick={() => {
-                    setSelectedProduct(product);
-                    setActiveImage(product.images[0]);
-                    setIsGridView(false);
-                    setTimeout(() => {
-                      document.getElementById('product-detail')?.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                      });
-                    }, 100);
-                  }}
+                  onClick={() => openProductModal(product)}
                   className="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-2xl 
                            overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60 
                            transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,215,0,0.3)]"
@@ -594,12 +618,12 @@ export default function Projects() {
                       )}
                     </div>
                     
-                    {/* Explore Link */}
+                    {/* View Details Link */}
                     <motion.div 
                       className="flex items-center text-yellow-400 text-sm font-semibold group/link"
                       whileHover={{ x: 5 }}
                     >
-                      <span>Explore Project</span>
+                      <span>View Details</span>
                       <motion.svg 
                         className="w-4 h-4 ml-1"
                         animate={{ x: hoveredProduct === product.name ? 5 : 0 }}
@@ -615,78 +639,108 @@ export default function Projects() {
             </AnimatePresence>
           </motion.div>
 
-          {/* Product Detail View */}
-          {!isGridView && (
+          {/* No Results */}
+          {filteredProducts.length === 0 && (
             <motion.div
-              id="product-detail"
-              initial={{ opacity: 0, y: 100 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 100 }}
-              className="mt-20 relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20"
             >
-              {/* Back Button */}
-              <motion.button
-                whileHover={{ x: -5 }}
-                onClick={() => setIsGridView(true)}
-                className="mb-8 flex items-center text-yellow-400 hover:text-yellow-300 
-                         transition-colors group"
-              >
-                <svg className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" 
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                </svg>
-                Back to Gallery
-              </motion.button>
+              <svg className="w-24 h-24 mx-auto text-gray-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} 
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 className="text-2xl font-bold text-gray-400 mb-2">No Results Found</h3>
+              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
+            </motion.div>
+          )}
+        </div>
 
-              {/* Detail Card */}
+        {/* Product Modal */}
+        <AnimatePresence>
+          {isModalOpen && selectedProduct && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              style={{
+                background: 'rgba(0, 0, 0, 0.95)',
+                backdropFilter: 'blur(20px)'
+              }}
+            >
               <motion.div
-                layoutId={selectedProduct.name}
-                className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl 
-                         border border-yellow-400/20 rounded-3xl overflow-hidden"
+                ref={modalRef}
+                initial={{ scale: 0.9, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 50 }}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto 
+                         bg-gradient-to-br from-gray-900 to-gray-950 rounded-3xl 
+                         border border-yellow-400/30 shadow-2xl shadow-yellow-500/20
+                         scrollbar-thin scrollbar-thumb-yellow-400/30 scrollbar-track-transparent"
               >
-                {/* Header */}
-                <div className="relative h-96 overflow-hidden">
-                  <motion.img
-                    src={activeImage}
-                    alt={selectedProduct.name}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1.2 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                  
-                  {/* Title Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8">
-                    <motion.h2 
-                      initial={{ y: 50, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.2 }}
-                      className="text-5xl font-bold text-white mb-2"
-                    >
-                      {selectedProduct.name}
-                    </motion.h2>
-                    <motion.div 
-                      initial={{ y: 50, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.3 }}
-                      className="flex gap-2"
-                    >
-                      <span className="px-4 py-2 bg-yellow-400 text-black rounded-full 
-                                     text-sm font-semibold">
-                        {selectedCategory.category}
-                      </span>
-                      <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full 
-                                     text-sm font-semibold border border-yellow-400/30">
-                        {selectedType.typeName}
-                      </span>
-                    </motion.div>
-                  </div>
-                </div>
+                {/* Close Button */}
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsModalOpen(false)}
+                  className="absolute top-6 right-6 z-50 text-white hover:text-yellow-400 
+                           transition-colors bg-black/50 rounded-full p-3 
+                           backdrop-blur-sm border border-white/20 hover:border-yellow-400/50"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                          d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
 
-                {/* Content */}
+                {/* Modal Content */}
                 <div className="p-8">
+                  {/* Header Image */}
+                  <div className="relative h-96 rounded-2xl overflow-hidden mb-8">
+                    <motion.img
+                      src={activeImage}
+                      alt={selectedProduct.name}
+                      className="w-full h-full object-cover"
+                      initial={{ scale: 1.2 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.6 }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
+                    
+                    {/* Title Overlay */}
+                    <div className="absolute bottom-0 left-0 right-0 p-8">
+                      <motion.h2 
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-4xl md:text-5xl font-bold text-white mb-3"
+                      >
+                        {selectedProduct.name}
+                      </motion.h2>
+                      <motion.div 
+                        initial={{ y: 50, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-wrap gap-2"
+                      >
+                        {'category' in selectedProduct && (
+                          <>
+                            <span className="px-4 py-2 bg-yellow-400 text-black rounded-full 
+                                           text-sm font-semibold">
+                              {(selectedProduct as any).category}
+                            </span>
+                            <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full 
+                                           text-sm font-semibold border border-yellow-400/30">
+                              {(selectedProduct as any).type}
+                            </span>
+                          </>
+                        )}
+                      </motion.div>
+                    </div>
+                  </div>
+
                   {/* Thumbnail Strip */}
                   <motion.div 
                     initial={{ y: 50, opacity: 0 }}
@@ -716,7 +770,10 @@ export default function Projects() {
                     {/* View All Button */}
                     <motion.button
                       whileHover={{ scale: 1.05 }}
-                      onClick={() => openImageViewer(0)}
+                      onClick={() => {
+                        setCurrentImageIndex(selectedProduct.images.indexOf(activeImage));
+                        setIsImageViewerOpen(true);
+                      }}
                       className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20 
                                to-amber-500/20 border-2 border-yellow-400/30 flex-shrink-0
                                flex flex-col items-center justify-center gap-1 
@@ -733,108 +790,181 @@ export default function Projects() {
                     </motion.button>
                   </motion.div>
 
-                  {/* Description */}
+                  {/* Tabs */}
                   <motion.div
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="mb-8"
+                    className="flex gap-4 mb-8 border-b border-yellow-400/20"
                   >
-                    <h3 className="text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
-                      <span className="w-8 h-0.5 bg-yellow-400"></span>
-                      Description
-                    </h3>
-                    <p className="text-gray-300 leading-relaxed text-lg pl-10">
-                      {selectedProduct.description}
-                    </p>
+                    <button
+                      onClick={() => setActiveTab('details')}
+                      className={`px-6 py-3 font-semibold transition-all duration-300 relative
+                                ${activeTab === 'details' 
+                                  ? 'text-yellow-400' 
+                                  : 'text-gray-400 hover:text-gray-300'}`}
+                    >
+                      Details & Features
+                      {activeTab === 'details' && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-400"
+                        />
+                      )}
+                    </button>
+                    {hasSpecifications(selectedProduct) && (
+                      <button
+                        onClick={() => setActiveTab('specs')}
+                        className={`px-6 py-3 font-semibold transition-all duration-300 relative
+                                  ${activeTab === 'specs' 
+                                    ? 'text-yellow-400' 
+                                    : 'text-gray-400 hover:text-gray-300'}`}
+                      >
+                        Technical Specifications
+                        {activeTab === 'specs' && (
+                          <motion.div
+                            layoutId="activeTab"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-400"
+                          />
+                        )}
+                      </button>
+                    )}
                   </motion.div>
 
-                  {/* Features */}
+                  {/* Tab Content */}
+                  <AnimatePresence mode="wait">
+                    {activeTab === 'details' && (
+                      <motion.div
+                        key="details"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {/* Description */}
+                        <div className="mb-8">
+                          <h3 className="text-xl font-semibold text-yellow-400 mb-3 flex items-center gap-2">
+                            <span className="w-8 h-0.5 bg-yellow-400"></span>
+                            Description
+                          </h3>
+                          <p className="text-gray-300 leading-relaxed text-lg pl-10">
+                            {selectedProduct.description}
+                          </p>
+                        </div>
+
+                        {/* Features */}
+                        <div>
+                          <h3 className="text-xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
+                            <span className="w-8 h-0.5 bg-yellow-400"></span>
+                            Key Features
+                          </h3>
+                          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pl-10">
+                            {selectedProduct.features.map((feature, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg 
+                                         border border-yellow-400/20 hover:border-yellow-400/40 
+                                         hover:bg-white/10 transition-all duration-300 group"
+                              >
+                                <span className="text-yellow-400 text-xl group-hover:scale-110 
+                                               transition-transform">✓</span>
+                                <span className="text-gray-300">{feature}</span>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {activeTab === 'specs' && hasSpecifications(selectedProduct) && (
+                      <motion.div
+                        key="specs"
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <h3 className="text-xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
+                          <span className="w-8 h-0.5 bg-yellow-400"></span>
+                          Technical Specifications
+                        </h3>
+                        <div className="grid md:grid-cols-2 gap-4 pl-10">
+                          {selectedProduct.specifications.map((spec: Specification, idx: number) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: idx * 0.05 }}
+                              whileHover={{ scale: 1.02, x: 5 }}
+                              className="bg-gradient-to-r from-white/5 to-white/10 p-4 
+                                       rounded-lg border border-yellow-400/20 
+                                       hover:border-yellow-400/40 transition-all duration-300"
+                            >
+                              <div className="text-yellow-300 font-semibold text-lg">
+                                {spec.model}
+                              </div>
+                              <div className="text-gray-400 text-sm mt-1 flex items-center gap-2">
+                                <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
+                                Capacity: {spec.capacity}
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Action Buttons */}
                   <motion.div
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="mb-8"
+                    transition={{ delay: 0.7 }}
+                    className="flex justify-end gap-4 mt-8 pt-6 border-t border-yellow-400/20"
                   >
-                    <h3 className="text-xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
-                      <span className="w-8 h-0.5 bg-yellow-400"></span>
-                      Key Features
-                    </h3>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pl-10">
-                      {selectedProduct.features.map((feature, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.6 + idx * 0.05 }}
-                          className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg 
-                                   border border-yellow-400/20 hover:border-yellow-400/40 
-                                   hover:bg-white/10 transition-all duration-300 group"
-                        >
-                          <span className="text-yellow-400 text-xl group-hover:scale-110 
-                                         transition-transform">✓</span>
-                          <span className="text-gray-300">{feature}</span>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-
-                  {/* Specifications */}
-                  {hasSpecifications(selectedProduct) && (
-                    <motion.div
-                      initial={{ y: 50, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ delay: 0.7 }}
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-6 py-3 rounded-lg border border-yellow-400/30 
+                               text-gray-300 hover:text-white hover:border-yellow-400/60 
+                               transition-all duration-300"
                     >
-                      <h3 className="text-xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
-                        <span className="w-8 h-0.5 bg-yellow-400"></span>
-                        Technical Specifications
-                      </h3>
-                      <div className="grid md:grid-cols-2 gap-4 pl-10">
-                        {selectedProduct.specifications.map((spec: Specification, idx: number) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.7 + idx * 0.05 }}
-                            whileHover={{ scale: 1.02, x: 5 }}
-                            className="bg-gradient-to-r from-white/5 to-white/10 p-4 
-                                     rounded-lg border border-yellow-400/20 
-                                     hover:border-yellow-400/40 transition-all duration-300"
-                          >
-                            <div className="text-yellow-300 font-semibold text-lg">
-                              {spec.model}
-                            </div>
-                            <div className="text-gray-400 text-sm mt-1 flex items-center gap-2">
-                              <span className="w-2 h-2 bg-yellow-400 rounded-full"></span>
-                              Capacity: {spec.capacity}
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
+                      Close
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 
+                               text-black font-semibold rounded-lg shadow-lg 
+                               hover:shadow-yellow-500/30 transition-all duration-300"
+                    >
+                      Request Quote
+                    </motion.button>
+                  </motion.div>
                 </div>
               </motion.div>
             </motion.div>
           )}
-        </div>
+        </AnimatePresence>
 
         {/* Fullscreen Image Viewer */}
         <AnimatePresence>
-          {isImageViewerOpen && (
+          {isImageViewerOpen && selectedProduct && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center"
+              className="fixed inset-0 z-[60] flex items-center justify-center"
               style={{
                 background: 'rgba(0, 0, 0, 0.98)',
                 backdropFilter: 'blur(20px)'
               }}
             >
               <motion.div
-                ref={modalRef}
+                ref={imageViewerRef}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
