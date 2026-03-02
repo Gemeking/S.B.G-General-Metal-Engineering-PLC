@@ -9,17 +9,28 @@ export default function Contact() {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const [lastSubmission, setLastSubmission] = useState<number>(0);
 
   // EmailJS configuration - Replace with your actual credentials
-  const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID"; // Get from EmailJS dashboard
-  const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID"; // Get from EmailJS dashboard
-  const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY"; // Get from EmailJS dashboard
+  const EMAILJS_SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+  const EMAILJS_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+  const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
 
   // Form submission handler
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!formRef.current) return;
+
+    // Rate limiting - 1 minute between submissions
+    const now = Date.now();
+    if (now - lastSubmission < 60000) {
+      setSubmitStatus({
+        type: "error",
+        message: "Please wait at least 1 minute between submissions.",
+      });
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: "" });
@@ -39,12 +50,13 @@ export default function Contact() {
           message: "Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.",
         });
         formRef.current.reset(); // Clear the form
+        setLastSubmission(now);
       }
     } catch (error) {
       console.error("EmailJS Error:", error);
       setSubmitStatus({
         type: "error",
-        message: "Failed to send message. Please try again or email us directly.",
+        message: "Failed to send message. Please try again or email us directly at sbg.general.metal.engineering.plc@gmail.com",
       });
     } finally {
       setIsSubmitting(false);
@@ -280,10 +292,10 @@ export default function Contact() {
                 </div>
               )}
 
-              {/* Form Fields - Add name attributes for EmailJS */}
+              {/* Form Fields - Match your EmailJS template variables */}
               <input
                 type="text"
-                name="from_name"
+                name="name"  // Matches {{name}} in template
                 placeholder="Your Name *"
                 required
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
@@ -292,7 +304,7 @@ export default function Contact() {
 
               <input
                 type="email"
-                name="from_email"
+                name="email"  // Matches {{email}} in template
                 placeholder="Your Email *"
                 required
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
@@ -301,39 +313,39 @@ export default function Contact() {
 
               <input
                 type="tel"
-                name="from_phone"
+                name="phone"  // Matches {{phone}} in template
                 placeholder="Your Phone Number"
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Your phone number (optional)"
               />
 
               <select
-                name="service_interest"
+                name="service"  // Matches {{service}} in template
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Select service of interest"
                 defaultValue=""
               >
                 <option value="" disabled className="bg-gray-800 text-gray-400">Select Service *</option>
-                <option value="stone-crusher" className="bg-gray-800 text-white">Stone Crusher Plant</option>
-                <option value="coal-crusher" className="bg-gray-800 text-white">Coal Crusher Plant</option>
-                <option value="portable-crusher" className="bg-gray-800 text-white">Portable Crusher</option>
-                <option value="conveyor" className="bg-gray-800 text-white">Conveyor System</option>
-                <option value="iron-sand" className="bg-gray-800 text-white">Iron Sand Processing Plant</option>
-                <option value="fertilizer" className="bg-gray-800 text-white">Fertilizer Plant</option>
-                <option value="maintenance" className="bg-gray-800 text-white">Maintenance Services</option>
-                <option value="other" className="bg-gray-800 text-white">Other Machinery</option>
+                <option value="Stone Crusher Plant" className="bg-gray-800 text-white">Stone Crusher Plant</option>
+                <option value="Coal Crusher Plant" className="bg-gray-800 text-white">Coal Crusher Plant</option>
+                <option value="Portable Crusher" className="bg-gray-800 text-white">Portable Crusher</option>
+                <option value="Conveyor System" className="bg-gray-800 text-white">Conveyor System</option>
+                <option value="Iron Sand Processing Plant" className="bg-gray-800 text-white">Iron Sand Processing Plant</option>
+                <option value="Fertilizer Plant" className="bg-gray-800 text-white">Fertilizer Plant</option>
+                <option value="Maintenance Services" className="bg-gray-800 text-white">Maintenance Services</option>
+                <option value="Other Machinery" className="bg-gray-800 text-white">Other Machinery</option>
               </select>
 
               <input
                 type="text"
-                name="subject"
+                name="subject"  // Matches {{subject}} in template
                 placeholder="Subject"
                 className="w-full p-3 md:p-4 rounded-lg bg-white/20 border border-yellow-400/50 text-white placeholder-gray-400 outline-none focus:ring-2 focus:ring-yellow-400 text-sm sm:text-base"
                 aria-label="Message subject"
               />
 
               <textarea
-                name="message"
+                name="message"  // Matches {{message}} in template
                 placeholder="Your Message *"
                 required
                 rows={4}
@@ -350,7 +362,7 @@ export default function Contact() {
                 tabIndex={-1}  
               />
 
-              {/* Add hidden field for company email recipient */}
+              {/* Add hidden field for company info if needed */}
               <input
                 type="hidden"
                 name="company_email"
