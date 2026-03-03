@@ -1,36 +1,29 @@
 import { useState, useEffect, useRef } from "react";
 import Layout from "../components/layout/Layout";
 import { motion, AnimatePresence } from "framer-motion";
-
 // Define TypeScript interfaces
 interface Specification {
   model: string;
   capacity: string;
 }
-
 interface BaseProduct {
   name: string;
   description: string;
   features: string[];
   images: string[];
 }
-
 interface ProductWithSpecs extends BaseProduct {
   specifications: Specification[];
 }
-
 type Product = BaseProduct | ProductWithSpecs;
-
 interface Type {
   typeName: string;
   products: Product[];
 }
-
 interface Category {
   category: string;
   types: Type[];
 }
-
 export default function Projects() {
   // ================================
   // PROJECT DATA (YOU EDIT THIS ONLY)
@@ -183,7 +176,6 @@ export default function Projects() {
       ],
     },
   ];
-
   // ================================
   // STATE MANAGEMENT
   // ================================
@@ -197,13 +189,11 @@ export default function Projects() {
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeTab, setActiveTab] = useState<'details' | 'specs'>('details');
-
   const modalRef = useRef<HTMLDivElement>(null);
   const imageViewerRef = useRef<HTMLDivElement>(null);
-
   // Get all products for search
-  const allProducts = projectData.flatMap(category => 
-    category.types.flatMap(type => 
+  const allProducts = projectData.flatMap(category =>
+    category.types.flatMap(type =>
       type.products.map(product => ({
         ...product,
         category: category.category,
@@ -211,21 +201,18 @@ export default function Projects() {
       }))
     )
   );
-
   // Filter products based on search
-  const filteredProducts = searchQuery.trim() === "" 
-    ? selectedType.products 
-    : allProducts.filter(product => 
+  const filteredProducts = searchQuery.trim() === ""
+    ? selectedType.products
+    : allProducts.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         product.features.some(f => f.toLowerCase().includes(searchQuery.toLowerCase()))
       );
-
   // Type guard to check if product has specifications
   const hasSpecifications = (product: Product): product is ProductWithSpecs => {
     return 'specifications' in product;
   };
-
   // Handle escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
@@ -237,21 +224,18 @@ export default function Projects() {
         }
       }
     };
-
     document.addEventListener('keydown', handleEscapeKey);
-    
+   
     if (isModalOpen || isImageViewerOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
       document.body.style.overflow = 'unset';
     };
   }, [isModalOpen, isImageViewerOpen]);
-
   // Handle click outside modal
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -262,75 +246,64 @@ export default function Projects() {
         setIsImageViewerOpen(false);
       }
     };
-
     if (isModalOpen || isImageViewerOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isModalOpen, isImageViewerOpen]);
-
   // Image viewer navigation
   const nextImage = () => {
     if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === selectedProduct.images.length - 1 ? 0 : prev + 1
       );
     }
   };
-
   const prevImage = () => {
     if (selectedProduct) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === 0 ? selectedProduct.images.length - 1 : prev - 1
       );
     }
   };
-
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
     setActiveImage(product.images[0]);
     setActiveTab('details');
     setIsModalOpen(true);
   };
-
-  const openImageViewer = (index: number) => {
-    setCurrentImageIndex(index);
-    setIsImageViewerOpen(true);
-  };
-
   return (
     <Layout>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen  to-black text-white"
+        className="min-h-screen to-black text-white"
       >
         {/* Dynamic Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 90, 0],
               opacity: [0.1, 0.2, 0.1]
             }}
-            transition={{ 
+            transition={{
               duration: 20,
               repeat: Infinity,
               ease: "linear"
             }}
             className="absolute top-20 -left-20 w-96 h-96 bg-yellow-500/10 rounded-full blur-[100px]"
           />
-          <motion.div 
-            animate={{ 
+          <motion.div
+            animate={{
               scale: [1, 1.3, 1],
               rotate: [0, -90, 0],
               opacity: [0.1, 0.15, 0.1]
             }}
-            transition={{ 
+            transition={{
               duration: 25,
               repeat: Infinity,
               ease: "linear"
@@ -338,14 +311,13 @@ export default function Projects() {
             className="absolute bottom-20 -right-20 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"
           />
           {/* Simple dot pattern */}
-          <div className="absolute inset-0 opacity-20" 
+          <div className="absolute inset-0 opacity-20"
                style={{
                  backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,215,0,0.15) 1px, transparent 0)',
                  backgroundSize: '40px 40px'
                }}>
           </div>
         </div>
-
         {/* Main Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 py-12">
           {/* Hero Section */}
@@ -354,7 +326,7 @@ export default function Projects() {
             animate={{ y: 0, opacity: 1 }}
             className="text-center mb-16"
           >
-            <motion.h1 
+            <motion.h1
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -363,26 +335,26 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
+              
             </motion.h1>
-            
+           
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: "200px" }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="h-1 bg-gradient-to-r from-yellow-400 to-amber-600 mx-auto mb-8"
             />
-            
+           
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
               className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
             >
-              Explore our comprehensive collection of industrial crushing solutions, 
+              Explore our comprehensive collection of industrial crushing solutions,
               each engineered for peak performance in the most demanding environments.
             </motion.p>
           </motion.div>
-
           {/* Search Bar */}
           <motion.div
             initial={{ y: 50, opacity: 0 }}
@@ -396,16 +368,16 @@ export default function Projects() {
                 placeholder="Search projects, features, or specifications..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 pl-14 bg-white/5 backdrop-blur-xl border border-yellow-400/30 
-                         rounded-2xl text-white placeholder-gray-400 focus:outline-none 
-                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20 
+                className="w-full px-6 py-4 pl-14 bg-white/5 backdrop-blur-xl border border-yellow-400/30
+                         rounded-2xl text-white placeholder-gray-400 focus:outline-none
+                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20
                          transition-all duration-300"
               />
-              <svg 
+              <svg
                 className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-yellow-400"
                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                       d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               {searchQuery && (
@@ -413,18 +385,17 @@ export default function Projects() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-5 top-1/2 transform -translate-y-1/2 
+                  className="absolute right-5 top-1/2 transform -translate-y-1/2
                            text-gray-400 hover:text-white transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                           d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </motion.button>
               )}
             </div>
           </motion.div>
-
           {/* Category Filter Pills */}
           <motion.div
             initial={{ y: 50, opacity: 0 }}
@@ -442,7 +413,7 @@ export default function Projects() {
                   setSelectedType(cat.types[0]);
                   setSearchQuery("");
                 }}
-                className={`px-8 py-4 rounded-full font-semibold transition-all duration-500 
+                className={`px-8 py-4 rounded-full font-semibold transition-all duration-500
                          backdrop-blur-xl border-2 relative overflow-hidden group
                          ${selectedCategory.category === cat.category
                            ? "border-yellow-400 text-yellow-400 shadow-lg shadow-yellow-400/30"
@@ -460,7 +431,6 @@ export default function Projects() {
               </motion.button>
             ))}
           </motion.div>
-
           {/* Type Selector */}
           {!searchQuery && (
             <motion.div
@@ -491,7 +461,6 @@ export default function Projects() {
               ))}
             </motion.div>
           )}
-
           {/* Results Count */}
           {searchQuery && (
             <motion.div
@@ -502,7 +471,6 @@ export default function Projects() {
               Found {filteredProducts.length} results for "{searchQuery}"
             </motion.div>
           )}
-
           {/* Gallery Grid */}
           <motion.div
             layout
@@ -516,7 +484,7 @@ export default function Projects() {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{ 
+                  transition={{
                     duration: 0.4,
                     delay: index * 0.05,
                     layout: { duration: 0.3 }
@@ -525,8 +493,8 @@ export default function Projects() {
                   onHoverStart={() => setHoveredProduct(product.name)}
                   onHoverEnd={() => setHoveredProduct(null)}
                   onClick={() => openProductModal(product)}
-                  className="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-2xl 
-                           overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60 
+                  className="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-2xl
+                           overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60
                            transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,215,0,0.3)]"
                 >
                   {/* Image Container */}
@@ -538,74 +506,74 @@ export default function Projects() {
                       whileHover={{ scale: 1.1 }}
                       transition={{ duration: 0.6 }}
                     />
-                    
+                   
                     {/* Image Overlay */}
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: hoveredProduct === product.name ? 1 : 0 }}
                       className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
                     />
-                    
+                   
                     {/* Category Tags */}
                     {'category' in product && (
                       <div className="absolute top-4 left-4 flex gap-2">
-                        <span className="px-3 py-1 bg-yellow-400/90 text-black text-xs font-semibold 
+                        <span className="px-3 py-1 bg-yellow-400/90 text-black text-xs font-semibold
                                        rounded-full backdrop-blur-sm">
                           {(product as any).category}
                         </span>
-                        <span className="px-3 py-1 bg-black/50 text-yellow-400 text-xs font-semibold 
+                        <span className="px-3 py-1 bg-black/50 text-yellow-400 text-xs font-semibold
                                        rounded-full backdrop-blur-sm border border-yellow-400/30">
                           {(product as any).type}
                         </span>
                       </div>
                     )}
-                    
+                   
                     {/* Image Count */}
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 text-yellow-400 
-                                  text-xs font-semibold rounded-full backdrop-blur-sm 
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 text-yellow-400
+                                  text-xs font-semibold rounded-full backdrop-blur-sm
                                   border border-yellow-400/30 flex items-center gap-1">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                       {product.images.length}
                     </div>
-                    
+                   
                     {/* Quick View Button */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
+                      animate={{
                         opacity: hoveredProduct === product.name ? 1 : 0,
                         y: hoveredProduct === product.name ? 0 : 20
                       }}
-                      className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
-                               bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold 
+                      className="absolute bottom-4 left-1/2 transform -translate-x-1/2
+                               bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold
                                text-sm shadow-lg flex items-center gap-2"
                     >
                       <span>Quick View</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                     </motion.div>
                   </div>
-                  
+                 
                   {/* Content */}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-yellow-300 mb-2 group-hover:text-yellow-400 
+                    <h3 className="text-xl font-bold text-yellow-300 mb-2 group-hover:text-yellow-400
                                    transition-colors line-clamp-1">
                       {product.name}
                     </h3>
                     <p className="text-gray-400 text-sm mb-4 line-clamp-2">
                       {product.description}
                     </p>
-                    
+                   
                     {/* Features Preview */}
                     <div className="flex flex-wrap gap-2 mb-4">
                       {product.features.slice(0, 3).map((feature, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-white/5 text-xs text-gray-300 
+                        <span key={idx} className="px-2 py-1 bg-white/5 text-xs text-gray-300
                                                  rounded-full border border-yellow-400/20">
                           {feature}
                         </span>
@@ -616,19 +584,19 @@ export default function Projects() {
                         </span>
                       )}
                     </div>
-                    
+                   
                     {/* View Details Link */}
-                    <motion.div 
+                    <motion.div
                       className="flex items-center text-yellow-400 text-sm font-semibold group/link"
                       whileHover={{ x: 5 }}
                     >
                       <span>View Details</span>
-                      <motion.svg 
+                      <motion.svg
                         className="w-4 h-4 ml-1"
                         animate={{ x: hoveredProduct === product.name ? 5 : 0 }}
                         fill="none" stroke="currentColor" viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </motion.svg>
                     </motion.div>
@@ -637,7 +605,6 @@ export default function Projects() {
               ))}
             </AnimatePresence>
           </motion.div>
-
           {/* No Results */}
           {filteredProducts.length === 0 && (
             <motion.div
@@ -646,7 +613,7 @@ export default function Projects() {
               className="text-center py-20"
             >
               <svg className="w-24 h-24 mx-auto text-gray-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} 
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
                       d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               <h3 className="text-2xl font-bold text-gray-400 mb-2">No Results Found</h3>
@@ -654,7 +621,6 @@ export default function Projects() {
             </motion.div>
           )}
         </div>
-
         {/* Product Modal */}
         <AnimatePresence>
           {isModalOpen && selectedProduct && (
@@ -674,8 +640,8 @@ export default function Projects() {
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 50 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto 
-                         bg-gradient-to-br from-gray-900 to-gray-950 rounded-3xl 
+                className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto
+                         bg-gradient-to-br from-gray-900 to-gray-950 rounded-3xl
                          border border-yellow-400/30 shadow-2xl shadow-yellow-500/20
                          scrollbar-thin scrollbar-thumb-yellow-400/30 scrollbar-track-transparent"
               >
@@ -684,16 +650,15 @@ export default function Projects() {
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setIsModalOpen(false)}
-                  className="absolute top-6 right-6 z-50 text-white hover:text-yellow-400 
-                           transition-colors bg-black/50 rounded-full p-3 
+                  className="absolute top-6 right-6 z-50 text-white hover:text-yellow-400
+                           transition-colors bg-black/50 rounded-full p-3
                            backdrop-blur-sm border border-white/20 hover:border-yellow-400/50"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                           d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </motion.button>
-
                 {/* Modal Content */}
                 <div className="p-8">
                   {/* Header Image */}
@@ -707,10 +672,10 @@ export default function Projects() {
                       transition={{ duration: 0.6 }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent" />
-                    
+                   
                     {/* Title Overlay */}
                     <div className="absolute bottom-0 left-0 right-0 p-8">
-                      <motion.h2 
+                      <motion.h2
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2 }}
@@ -718,7 +683,7 @@ export default function Projects() {
                       >
                         {selectedProduct.name}
                       </motion.h2>
-                      <motion.div 
+                      <motion.div
                         initial={{ y: 50, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
@@ -726,11 +691,11 @@ export default function Projects() {
                       >
                         {'category' in selectedProduct && (
                           <>
-                            <span className="px-4 py-2 bg-yellow-400 text-black rounded-full 
+                            <span className="px-4 py-2 bg-yellow-400 text-black rounded-full
                                            text-sm font-semibold">
                               {(selectedProduct as any).category}
                             </span>
-                            <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full 
+                            <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full
                                            text-sm font-semibold border border-yellow-400/30">
                               {(selectedProduct as any).type}
                             </span>
@@ -739,13 +704,12 @@ export default function Projects() {
                       </motion.div>
                     </div>
                   </div>
-
                   {/* Thumbnail Strip */}
-                  <motion.div 
+                  <motion.div
                     initial={{ y: 50, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-thin 
+                    className="flex gap-4 mb-8 overflow-x-auto pb-4 scrollbar-thin
                              scrollbar-thumb-yellow-400/30"
                   >
                     {selectedProduct.images.map((img, idx) => (
@@ -758,26 +722,29 @@ export default function Projects() {
                           setActiveImage(img);
                           setCurrentImageIndex(idx);
                         }}
-                        className={`w-24 h-24 object-cover rounded-xl cursor-pointer 
+                        className={`w-24 h-24 object-cover rounded-xl cursor-pointer
                                   transition-all duration-300 flex-shrink-0
-                                  ${activeImage === img 
-                                    ? 'border-4 border-yellow-400 shadow-lg shadow-yellow-400/30 scale-110' 
+                                  ${activeImage === img
+                                    ? 'border-4 border-yellow-400 shadow-lg shadow-yellow-400/30 scale-110'
                                     : 'border-2 border-yellow-400/20 hover:border-yellow-400/60'}`}
                       />
                     ))}
-                    
+                   
                     {/* View All Button */}
                     <motion.button
                       whileHover={{ scale: 1.05 }}
-                      onClick={() => openImageViewer(selectedProduct.images.indexOf(activeImage))}
-                      className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20 
+                      onClick={() => {
+                        setCurrentImageIndex(selectedProduct.images.indexOf(activeImage));
+                        setIsImageViewerOpen(true);
+                      }}
+                      className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20
                                to-amber-500/20 border-2 border-yellow-400/30 flex-shrink-0
-                               flex flex-col items-center justify-center gap-1 
+                               flex flex-col items-center justify-center gap-1
                                hover:border-yellow-400/60 transition-colors group"
                     >
-                      <svg className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" 
+                      <svg className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform"
                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
                       </svg>
                       <span className="text-xs text-yellow-400 font-semibold">
@@ -785,7 +752,6 @@ export default function Projects() {
                       </span>
                     </motion.button>
                   </motion.div>
-
                   {/* Tabs */}
                   <motion.div
                     initial={{ y: 50, opacity: 0 }}
@@ -796,8 +762,8 @@ export default function Projects() {
                     <button
                       onClick={() => setActiveTab('details')}
                       className={`px-6 py-3 font-semibold transition-all duration-300 relative
-                                ${activeTab === 'details' 
-                                  ? 'text-yellow-400' 
+                                ${activeTab === 'details'
+                                  ? 'text-yellow-400'
                                   : 'text-gray-400 hover:text-gray-300'}`}
                     >
                       Details & Features
@@ -812,8 +778,8 @@ export default function Projects() {
                       <button
                         onClick={() => setActiveTab('specs')}
                         className={`px-6 py-3 font-semibold transition-all duration-300 relative
-                                  ${activeTab === 'specs' 
-                                    ? 'text-yellow-400' 
+                                  ${activeTab === 'specs'
+                                    ? 'text-yellow-400'
                                     : 'text-gray-400 hover:text-gray-300'}`}
                       >
                         Technical Specifications
@@ -826,7 +792,6 @@ export default function Projects() {
                       </button>
                     )}
                   </motion.div>
-
                   {/* Tab Content */}
                   <AnimatePresence mode="wait">
                     {activeTab === 'details' && (
@@ -847,7 +812,6 @@ export default function Projects() {
                             {selectedProduct.description}
                           </p>
                         </div>
-
                         {/* Features */}
                         <div>
                           <h3 className="text-xl font-semibold text-yellow-400 mb-4 flex items-center gap-2">
@@ -861,11 +825,11 @@ export default function Projects() {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: idx * 0.05 }}
-                                className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg 
-                                         border border-yellow-400/20 hover:border-yellow-400/40 
+                                className="flex items-center space-x-3 p-3 bg-white/5 rounded-lg
+                                         border border-yellow-400/20 hover:border-yellow-400/40
                                          hover:bg-white/10 transition-all duration-300 group"
                               >
-                                <span className="text-yellow-400 text-xl group-hover:scale-110 
+                                <span className="text-yellow-400 text-xl group-hover:scale-110
                                                transition-transform">✓</span>
                                 <span className="text-gray-300">{feature}</span>
                               </motion.div>
@@ -874,7 +838,6 @@ export default function Projects() {
                         </div>
                       </motion.div>
                     )}
-
                     {activeTab === 'specs' && hasSpecifications(selectedProduct) && (
                       <motion.div
                         key="specs"
@@ -895,8 +858,8 @@ export default function Projects() {
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: idx * 0.05 }}
                               whileHover={{ scale: 1.02, x: 5 }}
-                              className="bg-gradient-to-r from-white/5 to-white/10 p-4 
-                                       rounded-lg border border-yellow-400/20 
+                              className="bg-gradient-to-r from-white/5 to-white/10 p-4
+                                       rounded-lg border border-yellow-400/20
                                        hover:border-yellow-400/40 transition-all duration-300"
                             >
                               <div className="text-yellow-300 font-semibold text-lg">
@@ -912,7 +875,6 @@ export default function Projects() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-
                   {/* Action Buttons */}
                   <motion.div
                     initial={{ y: 50, opacity: 0 }}
@@ -924,28 +886,19 @@ export default function Projects() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setIsModalOpen(false)}
-                      className="px-6 py-3 rounded-lg border border-yellow-400/30 
-                               text-gray-300 hover:text-white hover:border-yellow-400/60 
+                      className="px-6 py-3 rounded-lg border border-yellow-400/30
+                               text-gray-300 hover:text-white hover:border-yellow-400/60
                                transition-all duration-300"
                     >
                       Close
                     </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 
-                               text-black font-semibold rounded-lg shadow-lg 
-                               hover:shadow-yellow-500/30 transition-all duration-300"
-                    >
-                      Request Quote
-                    </motion.button>
+                    
                   </motion.div>
                 </div>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
-
         {/* Fullscreen Image Viewer */}
         <AnimatePresence>
           {isImageViewerOpen && selectedProduct && (
@@ -972,16 +925,15 @@ export default function Projects() {
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setIsImageViewerOpen(false)}
-                  className="absolute top-8 right-8 text-white hover:text-yellow-400 
-                           transition-colors z-50 bg-black/50 rounded-full p-3 
+                  className="absolute top-8 right-8 text-white hover:text-yellow-400
+                           transition-colors z-50 bg-black/50 rounded-full p-3
                            backdrop-blur-sm border border-white/20 hover:border-yellow-400/50"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                           d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </motion.button>
-
                 {/* Main Image */}
                 <motion.div
                   key={currentImageIndex}
@@ -994,11 +946,10 @@ export default function Projects() {
                   <img
                     src={selectedProduct.images[currentImageIndex]}
                     alt={`${selectedProduct.name} - View ${currentImageIndex + 1}`}
-                    className="max-h-[85vh] max-w-full object-contain rounded-lg 
+                    className="max-h-[85vh] max-w-full object-contain rounded-lg
                              shadow-2xl shadow-yellow-500/10"
                   />
                 </motion.div>
-
                 {/* Navigation */}
                 {selectedProduct.images.length > 1 && (
                   <>
@@ -1006,14 +957,14 @@ export default function Projects() {
                       whileHover={{ scale: 1.1, x: -5 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={prevImage}
-                      className="absolute left-8 top-1/2 transform -translate-y-1/2 
-                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4 
+                      className="absolute left-8 top-1/2 transform -translate-y-1/2
+                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4
                                transition-all duration-300 backdrop-blur-sm border border-white/20
                                hover:border-yellow-400/50 group"
                     >
-                      <svg className="w-6 h-6 group-hover:text-black transition-colors" 
+                      <svg className="w-6 h-6 group-hover:text-black transition-colors"
                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M15 19l-7-7 7-7" />
                       </svg>
                     </motion.button>
@@ -1021,26 +972,25 @@ export default function Projects() {
                       whileHover={{ scale: 1.1, x: 5 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={nextImage}
-                      className="absolute right-8 top-1/2 transform -translate-y-1/2 
-                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4 
+                      className="absolute right-8 top-1/2 transform -translate-y-1/2
+                               bg-black/50 hover:bg-yellow-500 text-white rounded-full p-4
                                transition-all duration-300 backdrop-blur-sm border border-white/20
                                hover:border-yellow-400/50 group"
                     >
-                      <svg className="w-6 h-6 group-hover:text-black transition-colors" 
+                      <svg className="w-6 h-6 group-hover:text-black transition-colors"
                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                               d="M9 5l7 7-7 7" />
                       </svg>
                     </motion.button>
                   </>
                 )}
-
                 {/* Image Info */}
-                <motion.div 
+                <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="absolute bottom-8 left-1/2 transform -translate-x-1/2 
+                  className="absolute bottom-8 left-1/2 transform -translate-x-1/2
                             bg-black/70 text-white px-6 py-3 rounded-full backdrop-blur-sm
                             border border-white/20 font-semibold flex items-center gap-4"
                 >
@@ -1050,14 +1000,13 @@ export default function Projects() {
                   <span className="w-px h-4 bg-white/20"></span>
                   <span className="text-gray-300">{selectedProduct.name}</span>
                 </motion.div>
-
                 {/* Thumbnail Strip */}
                 {selectedProduct.images.length > 1 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="absolute bottom-28 left-1/2 transform -translate-x-1/2 
+                    className="absolute bottom-28 left-1/2 transform -translate-x-1/2
                               flex gap-2 p-2 bg-black/50 backdrop-blur-sm rounded-xl
                               border border-white/10"
                   >
@@ -1068,10 +1017,10 @@ export default function Projects() {
                         whileHover={{ scale: 1.1, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setCurrentImageIndex(idx)}
-                        className={`w-16 h-16 object-cover rounded-lg cursor-pointer 
+                        className={`w-16 h-16 object-cover rounded-lg cursor-pointer
                                   transition-all duration-300 border-2
-                                  ${currentImageIndex === idx 
-                                    ? 'border-yellow-400 scale-110 shadow-lg shadow-yellow-400/30' 
+                                  ${currentImageIndex === idx
+                                    ? 'border-yellow-400 scale-110 shadow-lg shadow-yellow-400/30'
                                     : 'border-transparent hover:border-yellow-400/50'}`}
                       />
                     ))}
