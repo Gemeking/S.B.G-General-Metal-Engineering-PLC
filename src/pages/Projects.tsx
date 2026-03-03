@@ -11,6 +11,8 @@ interface BaseProduct {
   description: string;
   features: string[];
   images: string[];
+  category?: string;
+  type?: string;
 }
 interface ProductWithSpecs extends BaseProduct {
   specifications: Specification[];
@@ -179,36 +181,15 @@ export default function Projects() {
   // ================================
   // STATE MANAGEMENT
   // ================================
-  const [selectedCategory, setSelectedCategory] = useState<Category>(projectData[0]);
-  const [selectedType, setSelectedType] = useState<Type>(projectData[0].types[0]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [activeImage, setActiveImage] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState<boolean>(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const [activeTab, setActiveTab] = useState<'details' | 'specs'>('details');
   const modalRef = useRef<HTMLDivElement>(null);
   const imageViewerRef = useRef<HTMLDivElement>(null);
-  // Get all products for search
-  const allProducts = projectData.flatMap(category =>
-    category.types.flatMap(type =>
-      type.products.map(product => ({
-        ...product,
-        category: category.category,
-        type: type.typeName
-      }))
-    )
-  );
-  // Filter products based on search
-  const filteredProducts = searchQuery.trim() === ""
-    ? selectedType.products
-    : allProducts.filter(product =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.features.some(f => f.toLowerCase().includes(searchQuery.toLowerCase()))
-      );
   // Type guard to check if product has specifications
   const hasSpecifications = (product: Product): product is ProductWithSpecs => {
     return 'specifications' in product;
@@ -355,271 +336,162 @@ export default function Projects() {
               each engineered for peak performance in the most demanding environments.
             </motion.p>
           </motion.div>
-          {/* Search Bar */}
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="max-w-2xl mx-auto mb-12"
-          >
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search projects, features, or specifications..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-6 py-4 pl-14 bg-white/5 backdrop-blur-xl border border-yellow-400/30
-                         rounded-2xl text-white placeholder-gray-400 focus:outline-none
-                         focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/20
-                         transition-all duration-300"
-              />
-              <svg
-                className="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 text-yellow-400"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          {/* Gallery Sections */}
+          {projectData.map((category, catIndex) => (
+            <div key={category.category} className="mb-16">
+              <motion.h2
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 + catIndex * 0.2 }}
+                className="text-4xl font-bold text-yellow-300 mb-8 text-center"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              {searchQuery && (
-                <motion.button
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-5 top-1/2 transform -translate-y-1/2
-                           text-gray-400 hover:text-white transition-colors"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </motion.button>
-              )}
-            </div>
-          </motion.div>
-          {/* Category Filter Pills */}
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-wrap justify-center gap-4 mb-8"
-          >
-            {projectData.map((cat) => (
-              <motion.button
-                key={cat.category}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  setSelectedCategory(cat);
-                  setSelectedType(cat.types[0]);
-                  setSearchQuery("");
-                }}
-                className={`px-8 py-4 rounded-full font-semibold transition-all duration-500
-                         backdrop-blur-xl border-2 relative overflow-hidden group
-                         ${selectedCategory.category === cat.category
-                           ? "border-yellow-400 text-yellow-400 shadow-lg shadow-yellow-400/30"
-                           : "border-yellow-400/30 text-gray-300 hover:border-yellow-400/60"
-                         }`}
-              >
-                <span className="relative z-10">{cat.category}</span>
-                {selectedCategory.category === cat.category && (
+                {category.category}
+              </motion.h2>
+              {category.types.map((type, typeIndex) => (
+                <div key={type.typeName} className="mb-12">
+                  <motion.h3
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 + catIndex * 0.2 + typeIndex * 0.1 }}
+                    className="text-3xl font-semibold text-white mb-6 text-center"
+                  >
+                    {type.typeName}
+                  </motion.h3>
                   <motion.div
-                    layoutId="activeCategory"
-                    className="absolute inset-0 bg-yellow-400/10"
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </motion.div>
-          {/* Type Selector */}
-          {!searchQuery && (
-            <motion.div
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap justify-center gap-3 mb-16"
-            >
-              {selectedCategory.types.map((type) => (
-                <motion.button
-                  key={type.typeName}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setSelectedType(type);
-                    setSearchQuery("");
-                  }}
-                  className={`px-6 py-3 rounded-full transition-all duration-300 relative overflow-hidden
-                           ${selectedType.typeName === type.typeName
-                             ? "bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-semibold shadow-lg"
-                             : "bg-white/5 border border-yellow-400/30 hover:bg-yellow-500/20 text-gray-400"
-                           }`}
-                >
-                  {type.typeName}
-                </motion.button>
-              ))}
-            </motion.div>
-          )}
-          {/* Results Count */}
-          {searchQuery && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center mb-8 text-gray-400"
-            >
-              Found {filteredProducts.length} results for "{searchQuery}"
-            </motion.div>
-          )}
-          {/* Gallery Grid */}
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredProducts.map((product, index) => (
-                <motion.div
-                  key={product.name}
-                  layout
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  transition={{
-                    duration: 0.4,
-                    delay: index * 0.05,
-                    layout: { duration: 0.3 }
-                  }}
-                  whileHover={{ y: -10 }}
-                  onHoverStart={() => setHoveredProduct(product.name)}
-                  onHoverEnd={() => setHoveredProduct(null)}
-                  onClick={() => openProductModal(product)}
-                  className="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-2xl
-                           overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60
-                           transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,215,0,0.3)]"
-                >
-                  {/* Image Container */}
-                  <div className="relative overflow-hidden aspect-video">
-                    <motion.img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                   
-                    {/* Image Overlay */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: hoveredProduct === product.name ? 1 : 0 }}
-                      className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
-                    />
-                   
-                    {/* Category Tags */}
-                    {'category' in product && (
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        <span className="px-3 py-1 bg-yellow-400/90 text-black text-xs font-semibold
-                                       rounded-full backdrop-blur-sm">
-                          {(product as any).category}
-                        </span>
-                        <span className="px-3 py-1 bg-black/50 text-yellow-400 text-xs font-semibold
-                                       rounded-full backdrop-blur-sm border border-yellow-400/30">
-                          {(product as any).type}
-                        </span>
-                      </div>
-                    )}
-                   
-                    {/* Image Count */}
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 text-yellow-400
-                                  text-xs font-semibold rounded-full backdrop-blur-sm
-                                  border border-yellow-400/30 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {product.images.length}
-                    </div>
-                   
-                    {/* Quick View Button */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{
-                        opacity: hoveredProduct === product.name ? 1 : 0,
-                        y: hoveredProduct === product.name ? 0 : 20
-                      }}
-                      className="absolute bottom-4 left-1/2 transform -translate-x-1/2
-                               bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold
-                               text-sm shadow-lg flex items-center gap-2"
-                    >
-                      <span>Quick View</span>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </motion.div>
-                  </div>
-                 
-                  {/* Content */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-yellow-300 mb-2 group-hover:text-yellow-400
-                                   transition-colors line-clamp-1">
-                      {product.name}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
-                      {product.description}
-                    </p>
-                   
-                    {/* Features Preview */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {product.features.slice(0, 3).map((feature, idx) => (
-                        <span key={idx} className="px-2 py-1 bg-white/5 text-xs text-gray-300
-                                                 rounded-full border border-yellow-400/20">
-                          {feature}
-                        </span>
+                    layout
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                  >
+                    <AnimatePresence mode="popLayout">
+                      {type.products.map((product, index) => (
+                        <motion.div
+                          key={product.name}
+                          layout
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{
+                            duration: 0.4,
+                            delay: index * 0.05,
+                            layout: { duration: 0.3 }
+                          }}
+                          whileHover={{ y: -10 }}
+                          onHoverStart={() => setHoveredProduct(product.name)}
+                          onHoverEnd={() => setHoveredProduct(null)}
+                          onClick={() => openProductModal({ ...product, category: category.category, type: type.typeName })}
+                          className="group cursor-pointer bg-white/5 backdrop-blur-xl rounded-2xl
+                                   overflow-hidden border border-yellow-400/20 hover:border-yellow-400/60
+                                   transition-all duration-500 hover:shadow-[0_20px_60px_-15px_rgba(255,215,0,0.3)]"
+                        >
+                          {/* Image Container */}
+                          <div className="relative overflow-hidden aspect-video">
+                            <motion.img
+                              src={product.images[0]}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                              whileHover={{ scale: 1.1 }}
+                              transition={{ duration: 0.6 }}
+                            />
+                           
+                            {/* Image Overlay */}
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: hoveredProduct === product.name ? 1 : 0 }}
+                              className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+                            />
+                           
+                            {/* Category Tags */}
+                            <div className="absolute top-4 left-4 flex gap-2">
+                              <span className="px-3 py-1 bg-yellow-400/90 text-black text-xs font-semibold
+                                             rounded-full backdrop-blur-sm">
+                                {category.category}
+                              </span>
+                              <span className="px-3 py-1 bg-black/50 text-yellow-400 text-xs font-semibold
+                                             rounded-full backdrop-blur-sm border border-yellow-400/30">
+                                {type.typeName}
+                              </span>
+                            </div>
+                           
+                            {/* Image Count */}
+                            <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 text-yellow-400
+                                          text-xs font-semibold rounded-full backdrop-blur-sm
+                                          border border-yellow-400/30 flex items-center gap-1">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                              {product.images.length}
+                            </div>
+                           
+                            {/* Quick View Button */}
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{
+                                opacity: hoveredProduct === product.name ? 1 : 0,
+                                y: hoveredProduct === product.name ? 0 : 20
+                              }}
+                              className="absolute bottom-4 left-1/2 transform -translate-x-1/2
+                                       bg-yellow-400 text-black px-6 py-2 rounded-full font-semibold
+                                       text-sm shadow-lg flex items-center gap-2"
+                            >
+                              <span>Quick View</span>
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                            </motion.div>
+                          </div>
+                         
+                          {/* Content */}
+                          <div className="p-6">
+                            <h3 className="text-xl font-bold text-yellow-300 mb-2 group-hover:text-yellow-400
+                                           transition-colors line-clamp-1">
+                              {product.name}
+                            </h3>
+                            <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                              {product.description}
+                            </p>
+                           
+                            {/* Features Preview */}
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {product.features.slice(0, 3).map((feature, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-white/5 text-xs text-gray-300
+                                                         rounded-full border border-yellow-400/20">
+                                  {feature}
+                                </span>
+                              ))}
+                              {product.features.length > 3 && (
+                                <span className="px-2 py-1 text-xs text-yellow-400">
+                                  +{product.features.length - 3} more
+                                </span>
+                              )}
+                            </div>
+                           
+                            {/* View Details Link */}
+                            <motion.div
+                              className="flex items-center text-yellow-400 text-sm font-semibold group/link"
+                              whileHover={{ x: 5 }}
+                            >
+                              <span>View Details</span>
+                              <motion.svg
+                                className="w-4 h-4 ml-1"
+                                animate={{ x: hoveredProduct === product.name ? 5 : 0 }}
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                              >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                      d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                              </motion.svg>
+                            </motion.div>
+                          </div>
+                        </motion.div>
                       ))}
-                      {product.features.length > 3 && (
-                        <span className="px-2 py-1 text-xs text-yellow-400">
-                          +{product.features.length - 3} more
-                        </span>
-                      )}
-                    </div>
-                   
-                    {/* View Details Link */}
-                    <motion.div
-                      className="flex items-center text-yellow-400 text-sm font-semibold group/link"
-                      whileHover={{ x: 5 }}
-                    >
-                      <span>View Details</span>
-                      <motion.svg
-                        className="w-4 h-4 ml-1"
-                        animate={{ x: hoveredProduct === product.name ? 5 : 0 }}
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                              d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                      </motion.svg>
-                    </motion.div>
-                  </div>
-                </motion.div>
+                    </AnimatePresence>
+                  </motion.div>
+                </div>
               ))}
-            </AnimatePresence>
-          </motion.div>
-          {/* No Results */}
-          {filteredProducts.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-20"
-            >
-              <svg className="w-24 h-24 mx-auto text-gray-600 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1}
-                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="text-2xl font-bold text-gray-400 mb-2">No Results Found</h3>
-              <p className="text-gray-500">Try adjusting your search or filter criteria</p>
-            </motion.div>
-          )}
+            </div>
+          ))}
         </div>
         {/* Product Modal */}
         <AnimatePresence>
@@ -689,18 +561,14 @@ export default function Projects() {
                         transition={{ delay: 0.3 }}
                         className="flex flex-wrap gap-2"
                       >
-                        {'category' in selectedProduct && (
-                          <>
-                            <span className="px-4 py-2 bg-yellow-400 text-black rounded-full
-                                           text-sm font-semibold">
-                              {(selectedProduct as any).category}
-                            </span>
-                            <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full
-                                           text-sm font-semibold border border-yellow-400/30">
-                              {(selectedProduct as any).type}
-                            </span>
-                          </>
-                        )}
+                        <span className="px-4 py-2 bg-yellow-400 text-black rounded-full
+                                       text-sm font-semibold">
+                          {selectedProduct.category}
+                        </span>
+                        <span className="px-4 py-2 bg-white/10 text-yellow-400 rounded-full
+                                       text-sm font-semibold border border-yellow-400/30">
+                          {selectedProduct.type}
+                        </span>
                       </motion.div>
                     </div>
                   </div>
