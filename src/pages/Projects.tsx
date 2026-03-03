@@ -263,9 +263,7 @@ export default function Projects() {
       }
     };
 
-    if (isModalOpen || isImageViewerOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -296,6 +294,7 @@ export default function Projects() {
     setIsModalOpen(true);
   };
 
+  // This function is used in the thumbnail strip's "View All" button
   const openImageViewer = (index: number) => {
     setCurrentImageIndex(index);
     setIsImageViewerOpen(true);
@@ -307,7 +306,7 @@ export default function Projects() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen  to-black text-white"
+        className="min-h-screen to-black text-white"
       >
         {/* Dynamic Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -363,7 +362,7 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-              <span className="text-white"> GALLERY</span>
+            
             </motion.h1>
             
             <motion.div
@@ -771,8 +770,9 @@ export default function Projects() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       onClick={() => {
-                        setCurrentImageIndex(selectedProduct.images.indexOf(activeImage));
-                        setIsImageViewerOpen(true);
+                        // Find the index of the current active image
+                        const index = selectedProduct.images.findIndex(img => img === activeImage);
+                        openImageViewer(index >= 0 ? index : 0);
                       }}
                       className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20 
                                to-amber-500/20 border-2 border-yellow-400/30 flex-shrink-0
