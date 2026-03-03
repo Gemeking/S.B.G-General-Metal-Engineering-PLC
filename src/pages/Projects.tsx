@@ -263,7 +263,9 @@ export default function Projects() {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    if (isModalOpen || isImageViewerOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -294,17 +296,9 @@ export default function Projects() {
     setIsModalOpen(true);
   };
 
-  // This function is used in the thumbnail strip's "View All" button
-  // We need to explicitly mark it as used with a directive or make it directly callable
-  
-
-  // Create a direct handler for the View All button to avoid the unused function warning
-  const handleViewAllClick = () => {
-    if (selectedProduct) {
-      const index = selectedProduct.images.findIndex(img => img === activeImage);
-      setCurrentImageIndex(index >= 0 ? index : 0);
-      setIsImageViewerOpen(true);
-    }
+  const openImageViewer = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsImageViewerOpen(true);
   };
 
   return (
@@ -313,7 +307,7 @@ export default function Projects() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="min-h-screen to-black text-white"
+        className="min-h-screen  to-black text-white"
       >
         {/* Dynamic Background Elements */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -369,7 +363,6 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-              
             </motion.h1>
             
             <motion.div
@@ -773,10 +766,10 @@ export default function Projects() {
                       />
                     ))}
                     
-                    {/* View All Button - Using direct handler instead of openImageViewer */}
+                    {/* View All Button */}
                     <motion.button
                       whileHover={{ scale: 1.05 }}
-                      onClick={handleViewAllClick}
+                      onClick={() => openImageViewer(selectedProduct.images.indexOf(activeImage))}
                       className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20 
                                to-amber-500/20 border-2 border-yellow-400/30 flex-shrink-0
                                flex flex-col items-center justify-center gap-1 
@@ -937,7 +930,15 @@ export default function Projects() {
                     >
                       Close
                     </motion.button>
-                    
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 
+                               text-black font-semibold rounded-lg shadow-lg 
+                               hover:shadow-yellow-500/30 transition-all duration-300"
+                    >
+                      Request Quote
+                    </motion.button>
                   </motion.div>
                 </div>
               </motion.div>
