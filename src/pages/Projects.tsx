@@ -296,10 +296,7 @@ export default function Projects() {
 
   // This function is used in the thumbnail strip's "View All" button
   // We need to explicitly mark it as used with a directive or make it directly callable
-  const openImageViewer = (index: number) => {
-    setCurrentImageIndex(index);
-    setIsImageViewerOpen(true);
-  };
+  
 
   // Create a direct handler for the View All button to avoid the unused function warning
   const handleViewAllClick = () => {
@@ -940,15 +937,7 @@ export default function Projects() {
                     >
                       Close
                     </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-amber-500 
-                               text-black font-semibold rounded-lg shadow-lg 
-                               hover:shadow-yellow-500/30 transition-all duration-300"
-                    >
-                      Request Quote
-                    </motion.button>
+                    
                   </motion.div>
                 </div>
               </motion.div>
