@@ -295,9 +295,19 @@ export default function Projects() {
   };
 
   // This function is used in the thumbnail strip's "View All" button
+  // We need to explicitly mark it as used with a directive or make it directly callable
   const openImageViewer = (index: number) => {
     setCurrentImageIndex(index);
     setIsImageViewerOpen(true);
+  };
+
+  // Create a direct handler for the View All button to avoid the unused function warning
+  const handleViewAllClick = () => {
+    if (selectedProduct) {
+      const index = selectedProduct.images.findIndex(img => img === activeImage);
+      setCurrentImageIndex(index >= 0 ? index : 0);
+      setIsImageViewerOpen(true);
+    }
   };
 
   return (
@@ -362,7 +372,7 @@ export default function Projects() {
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 PROJECT
               </span>
-            
+              
             </motion.h1>
             
             <motion.div
@@ -766,14 +776,10 @@ export default function Projects() {
                       />
                     ))}
                     
-                    {/* View All Button */}
+                    {/* View All Button - Using direct handler instead of openImageViewer */}
                     <motion.button
                       whileHover={{ scale: 1.05 }}
-                      onClick={() => {
-                        // Find the index of the current active image
-                        const index = selectedProduct.images.findIndex(img => img === activeImage);
-                        openImageViewer(index >= 0 ? index : 0);
-                      }}
+                      onClick={handleViewAllClick}
                       className="w-24 h-24 rounded-xl bg-gradient-to-br from-yellow-400/20 
                                to-amber-500/20 border-2 border-yellow-400/30 flex-shrink-0
                                flex flex-col items-center justify-center gap-1 
