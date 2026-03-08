@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import Layout from "../components/layout/Layout";
 import { motion, AnimatePresence } from "framer-motion";
+
 // Define TypeScript interfaces
 interface Specification {
   model: string;
   capacity: string;
 }
+
 interface BaseProduct {
   name: string;
   description: string;
@@ -14,18 +16,23 @@ interface BaseProduct {
   category?: string;
   type?: string;
 }
+
 interface ProductWithSpecs extends BaseProduct {
   specifications: Specification[];
 }
+
 type Product = BaseProduct | ProductWithSpecs;
+
 interface Type {
   typeName: string;
   products: Product[];
 }
+
 interface Category {
   category: string;
   types: Type[];
 }
+
 export default function Projects() {
   // ================================
   // PROJECT DATA (YOU EDIT THIS ONLY)
@@ -172,12 +179,103 @@ export default function Projects() {
               images: [
                 "/impact/IMPACT-CRUSHER-1.jpg",
               ]
+            },
+            {
+              name: "Chassis",
+              description: "Robust and durable steel frame structure designed to support and mount crushing equipment, providing stability and mobility for complete crushing plants. Engineered for easy transportation and quick site setup.",
+              features: [
+                "Heavy-Duty Steel Construction",
+                "Modular Design for Easy Assembly",
+                "Integrated Support Structures",
+                "Wheel-Mounted for Mobility",
+                "Corrosion-Resistant Coating",
+                "Customizable Configurations"
+              ],
+              images: [
+                "/Chassis/Chassis.jpg",
+                "/Chassis/Chassis1.jpg",
+                "/Chassis/Chassis2.jpg",
+                "/Chassis/Chassis4.jpg",
+              ]
+            },
+            {
+              name: "Conveyor System",
+              description: "High-capacity belt conveyor system designed for efficient material handling between crushing and screening stages. Ensures continuous, smooth flow of materials with minimal spillage and maintenance requirements.",
+              features: [
+                "Heavy-Duty Belt Construction",
+                "Adjustable Height and Angle",
+                "Impact-Resistant Idlers",
+                "Self-Tracking Design",
+                "Weather-Protected Components",
+                "Low Energy Consumption"
+              ],
+              images: [
+                "/Conveyer System/Conveyer System.jpg",
+                "/Conveyer System/Conveyer System1.jpg",
+                "/Conveyer System/Conveyer System2.jpg",
+                "/Conveyer System/Conveyer System4.jpg",
+              ]
+            },
+            {
+              name: "Hopper",
+              description: "Large-capacity feeding hopper designed for continuous material loading and controlled discharge to crushers and conveyors. Features reinforced construction to withstand impact from heavy loads and loader operations.",
+              features: [
+                "High-Capacity Storage",
+                "Reinforced Wear Plates",
+                "Steep Angled Walls for Flow",
+                "Vibrating Grizzly Option",
+                "Easy Access for Maintenance",
+                "Customizable Size Options"
+              ],
+              images: [
+                "/Hooper/Hooper1.jpg",
+                "/Hooper/Hooper2.jpg",
+                "/Hooper/Hooper3.jpg",
+                "/Hooper/Hooper4.jpg",
+              ]
+            },
+            {
+              name: "Vibrating Feeder",
+              description: "Advanced vibrating feeder for controlled and uniform material delivery to primary crushers. Utilizes balanced vibratory motion to ensure consistent feed rates while removing fines and undersize materials.",
+              features: [
+                "Adjustable Feed Rate",
+                "Heavy-Duty Vibrating Mechanism",
+                "Grizzly Section for Fines Removal",
+                "Low Maintenance Design",
+                "Shock-Absorbing Springs",
+                "Variable Speed Control"
+              ],
+              images: [
+                "/Vibrating Feeder/Vibrating Feeder.jpg",
+                "/Vibrating Feeder/Vibrating Feeder1.jpg",
+                "/Vibrating Feeder/Vibrating Feeder3.jpg",
+                "/Vibrating Feeder/Vibrating Feeder4.jpg",
+              ]
+            },
+            {
+              name: "Vibrating Screen",
+              description: "High-efficiency multi-deck vibrating screen for precise material classification and separation. Engineered to deliver maximum screening efficiency with adjustable amplitude and frequency settings.",
+              features: [
+                "Multiple Deck Configurations",
+                "Adjustable Vibration Settings",
+                "Quick-Mesh Change System",
+                "High Screening Efficiency",
+                "Sealed Bearings for Dust Protection",
+                "Low Noise Operation"
+              ],
+              images: [
+                "/Vibrating Screen/Vibrating Screen.jpg",
+                "/Vibrating Screen/Vibrating Screen1.jpg",
+                "/Vibrating Screen/Vibrating Screen2.jpg",
+                "/Vibrating Screen/Vibrating Screen3.jpg",
+              ]
             }
           ],
         },
       ],
     },
   ];
+
   // ================================
   // STATE MANAGEMENT
   // ================================
@@ -190,10 +288,12 @@ export default function Projects() {
   const [activeTab, setActiveTab] = useState<'details' | 'specs'>('details');
   const modalRef = useRef<HTMLDivElement>(null);
   const imageViewerRef = useRef<HTMLDivElement>(null);
+
   // Type guard to check if product has specifications
   const hasSpecifications = (product: Product): product is ProductWithSpecs => {
     return 'specifications' in product;
   };
+
   // Handle escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
@@ -205,6 +305,7 @@ export default function Projects() {
         }
       }
     };
+
     document.addEventListener('keydown', handleEscapeKey);
    
     if (isModalOpen || isImageViewerOpen) {
@@ -212,11 +313,13 @@ export default function Projects() {
     } else {
       document.body.style.overflow = 'unset';
     }
+
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
       document.body.style.overflow = 'unset';
     };
   }, [isModalOpen, isImageViewerOpen]);
+
   // Handle click outside modal
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -227,13 +330,16 @@ export default function Projects() {
         setIsImageViewerOpen(false);
       }
     };
+
     if (isModalOpen || isImageViewerOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isModalOpen, isImageViewerOpen]);
+
   // Image viewer navigation
   const nextImage = () => {
     if (selectedProduct) {
@@ -242,6 +348,7 @@ export default function Projects() {
       );
     }
   };
+
   const prevImage = () => {
     if (selectedProduct) {
       setCurrentImageIndex((prev) =>
@@ -249,6 +356,7 @@ export default function Projects() {
       );
     }
   };
+
   const openProductModal = (product: Product) => {
     setSelectedProduct(product);
     setActiveImage(product.images[0]);
